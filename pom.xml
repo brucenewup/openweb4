@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.3.2</version>
         <relativePath/>
     </parent>
 
@@ -16,10 +16,10 @@
     <artifactId>openweb4</artifactId>
     <version>1.0.0</version>
     <name>OpenWeb4 Web3 AI Monitor</name>
-    <description>Web3 on-chain monitoring, crypto news, and AI Q&amp;A via OpenClaw WebSocket</description>
+    <description>Web3 on-chain monitoring, crypto news, and AI Q&amp;A via OpenAI-compatible API</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>

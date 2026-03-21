@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.time.Duration;
 import java.util.Locale;
 
 @Configuration
@@ -18,7 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
         resolver.setCookieName("openweb4.lang");
         resolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-        resolver.setCookieMaxAge(86400 * 365);
+        resolver.setCookieMaxAge(Duration.ofDays(365));
         return resolver;
     }
 
