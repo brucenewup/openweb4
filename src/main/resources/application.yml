@@ -1,0 +1,50 @@
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    # 公共部署：避免向客户端泄露异常详情；本地调试可设 SERVER_ERROR_INCLUDE_MESSAGE=always
+    include-message: ${SERVER_ERROR_INCLUDE_MESSAGE:never}
+    include-binding-errors: never
+    include-stacktrace: never
+
+spring:
+  application:
+    name: openweb4
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:true}
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+  messages:
+    basename: messages
+    fallback-to-system-locale: false
+
+app:
+  ai:
+    base-url: ${AI_BASE_URL:https://gmn.chuangzuoli.com/v1}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:gpt-5.1}
+    max-tokens: ${AI_MAX_TOKENS:1024}
+  security:
+    allowed-origins: ${APP_ALLOWED_ORIGINS:http://127.0.0.1:8080,http://localhost:8080}
+    max-chat-message-length: ${APP_MAX_CHAT_MESSAGE_LENGTH:500}
+  tweets:
+    handles: ${APP_TWEET_HANDLES:elonmusk,cz_binance,VitalikButerin,CryptoHayes,saylor,BarrySilbert,APompliano,PeterSchiff,TimFerriss,naval,TheBlock__,fundstrat,woonomic,scottmelker,MichaelvanDePoppe,CryptoCobain,Bitboy_Crypto,CryptoRus,thejustinwelsh,PaddyG96,rowancheung,thedankoe,bentossell,dickiebush,LinusEkenstam,fortelabs,steveschoger,RyanHoliday}
+  rate-limit:
+    enabled: ${APP_RATE_LIMIT_ENABLED:true}
+    # 带 refresh=1 的 GET（强制拉取远端/刷新缓存）按 IP 限流
+    refresh-window-seconds: ${APP_RATE_LIMIT_REFRESH_WINDOW:60}
+    refresh-max-per-window: ${APP_RATE_LIMIT_REFRESH_MAX:20}
+    # AI 对话 POST /api/chat/stream 按 IP 限流
+    chat-window-seconds: ${APP_RATE_LIMIT_CHAT_WINDOW:60}
+    chat-max-per-window: ${APP_RATE_LIMIT_CHAT_MAX:30}
+    # 仅在可信反向代理后部署时设为 true，否则勿开（易被伪造 IP）
+    trust-x-forwarded-for: ${APP_RATE_LIMIT_TRUST_XFF:false}
+
+logging:
+  level:
+    root: INFO
+    com.openweb4: INFO
+    org.springframework.web: INFO

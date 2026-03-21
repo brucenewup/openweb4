@@ -1,0 +1,21 @@
+# Maven
+/target/
+
+# Local / IDE
+.idea/
+*.iml
+.DS_Store
+
+# Claude Code local permissions (do not publish)
+.claude/
+
+# Editor / merge backups
+*.bak
+*.bak.*
+
+# Node (when running frontend from repo root)
+node_modules/
+
+# Plans / docs (do not publish)
+/docs/
+/PLAN.md
