@@ -1,6 +1,6 @@
 # OpenWeb4 — Web3 AI 链上监控
 
-Spring Boot 应用：链上数据监控（BTC/ETH/USDT）、行情新闻、大V推文聚合、AI 智能问答（通过本服务调用 OpenAI 兼容流式 API）。支持中英双语界面与 SPA 单页路由体验。
+Spring Boot 应用：链上数据监控（BTC/ETH/USDT）、行情新闻、大V推文聚合、行情预测、行情指数、AI 智能问答（通过本服务调用 OpenAI 兼容流式 API）。支持中英双语界面与 SPA 单页路由体验。
 
 ## 功能
 
