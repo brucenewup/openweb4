@@ -44,13 +44,6 @@ Reference page for **AI agent / OpenClaw-style** exchange and third-party **Skil
 - i18n: `?lang=zh` / `?lang=en`
 - AI: OpenAI-compatible API via `app.ai.*` / env `AI_*`
 
-## Recent updates (2026-03)
-
-- Spring Boot 3.3.x + Java 17, `jakarta.*` migration, tests green
-- Security hardening for public repo: no hardcoded keys, tighter default error exposure
-- Chat UI: user messages via `textContent` to reduce XSS risk
-- Controller/API tests including removed debug endpoints
-
 ## Run
 
 ```bash
