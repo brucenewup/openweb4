@@ -3,7 +3,7 @@
 </p>
 <p align="center"><sub>默认 Web UI：Spring Boot SPA · 中文 · 仪表盘</sub></p>
 
-# OpenWeb4 — `frontend/`
+# OpenWeb4 — `frontend`
 
 ---
 
