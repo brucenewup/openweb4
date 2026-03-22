@@ -1,3 +1,29 @@
+<p align="center">
+  <img src="../assets/screenshot-dashboard-zh.png" alt="OpenWeb4 仪表盘（中文界面）" width="820" />
+</p>
+<p align="center"><sub>默认 Web UI：Spring Boot SPA · 中文 · 仪表盘</sub></p>
+
+# OpenWeb4 — `frontend/`（可选子项目）
+
+## 关于本目录
+
+这里是 **Vite + React + TypeScript** 的实验与备用前端工程。线上/本地默认使用的界面是 Spring Boot 内置的 **Thymeleaf 单页应用**（[`spa.html`](../src/main/resources/templates/spa.html)），与 `frontend/` 无强绑定；仅在需要独立构建或替换前端时再使用本目录。
+
+## 文档与许可
+
+- 项目说明（中/英）：[`README.md`](../README.md) · [`README.en.md`](../README.en.md)  
+- 开源协议：[`LICENSE`](../LICENSE)（MIT）
+
+## 交流与联系
+
+欢迎加入 Telegram 群组 **openweb4**，讨论使用问题、功能想法与贡献协作：
+
+[**https://t.me/+fK2gVWLZako2ZGFl**](https://t.me/+fK2gVWLZako2ZGFl)
+
+（入群链接由 Telegram 生成；若失效请到仓库 Issue 反馈更新。）
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -11,7 +11,7 @@ public class DashboardController {
         return "spa";
     }
 
-    @GetMapping({"/dashboard", "/news", "/kol-tweets", "/market-forecast", "/market-indices", "/ai-chat"})
+    @GetMapping({"/dashboard", "/news", "/kol-tweets", "/market-forecast", "/market-indices", "/transaction-skills", "/ai-chat"})
     public String spaFallback() {
         return "spa";
     }

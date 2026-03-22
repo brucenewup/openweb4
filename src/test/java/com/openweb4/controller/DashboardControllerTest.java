@@ -29,4 +29,11 @@ class DashboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("spa"));
     }
+
+    @Test
+    void transactionSkillsReturnsSpaShell() throws Exception {
+        mockMvc.perform(get("/transaction-skills"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("spa"));
+    }
 }
