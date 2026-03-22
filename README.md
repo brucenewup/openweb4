@@ -2,6 +2,11 @@
   <img src="assets/openweb4-logo.svg" alt="OpenWeb4" width="96" height="96" />
 </p>
 
+<p align="center">
+  <img src="../assets/screenshot-dashboard-zh.png" alt="OpenWeb4 仪表盘（中文界面）" width="820" />
+</p>
+<p align="center"><sub>默认 Web UI：Spring Boot SPA · 中文 · 仪表盘</sub></p>
+
 # OpenWeb4 — Web3 AI 链上监控
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
