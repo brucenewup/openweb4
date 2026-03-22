@@ -7,6 +7,7 @@ import com.openweb4.model.TweetItem;
 import com.openweb4.model.WhaleTransaction;
 import com.openweb4.service.CryptoPriceService;
 import com.openweb4.service.NewsService;
+import com.openweb4.service.TransactionSkillService;
 import com.openweb4.service.WhaleTrackingService;
 import com.openweb4.service.TweetService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,15 +28,18 @@ public class ApiController {
     private final WhaleTrackingService whaleTrackingService;
     private final NewsService newsService;
     private final TweetService tweetService;
+    private final TransactionSkillService transactionSkillService;
 
     public ApiController(CryptoPriceService cryptoPriceService,
                          WhaleTrackingService whaleTrackingService,
                          NewsService newsService,
-                         TweetService tweetService) {
+                         TweetService tweetService,
+                         TransactionSkillService transactionSkillService) {
         this.cryptoPriceService = cryptoPriceService;
         this.whaleTrackingService = whaleTrackingService;
         this.newsService = newsService;
         this.tweetService = tweetService;
+        this.transactionSkillService = transactionSkillService;
     }
 
     @GetMapping("/api/overview")
@@ -131,5 +135,12 @@ public class ApiController {
     public Map<String, Object> kolAuthors() {
         List<TweetAuthor> authors = tweetService.getAllAuthors();
         return Map.of("authors", authors);
+    }
+
+    @GetMapping("/api/transaction-skills")
+    public Map<String, Object> transactionSkills(@RequestParam(name = "lang", required = false, defaultValue = "") String lang,
+                                                 Locale locale) {
+        Locale effectiveLocale = resolveLocale(lang, locale);
+        return transactionSkillService.getComparison(effectiveLocale);
     }
 }

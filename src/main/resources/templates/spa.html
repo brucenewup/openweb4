@@ -93,9 +93,29 @@ body { font-family: 'Inter','Noto Sans SC',system-ui,sans-serif; background: var
   90%  { opacity: 0.6; }
   100% { transform: translateY(100vh); opacity: 0; }
 }
-@keyframes nodeFloat {
-  0%,100% { transform: translateY(0px) scale(1); }
-  50%      { transform: translateY(-6px) scale(1.05); }
+@keyframes logoGlowFlash {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.22), inset 0 0 6px rgba(0, 240, 255, 0.08);
+    border-color: rgba(0, 240, 255, 0.38);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.5), 0 0 38px rgba(139, 92, 246, 0.18), inset 0 0 11px rgba(0, 240, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.75);
+    filter: brightness(1.12);
+  }
+}
+@keyframes logoGlowFlashLight {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 102, 255, 0.18), inset 0 0 5px rgba(0, 85, 221, 0.07);
+    border-color: rgba(0, 102, 255, 0.32);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.38), 0 0 32px rgba(124, 58, 237, 0.14), inset 0 0 9px rgba(0, 85, 221, 0.14);
+    border-color: rgba(0, 102, 255, 0.55);
+    filter: brightness(1.08);
+  }
 }
 @keyframes hexPulse {
   0%,100% { opacity: 0.4; transform: scale(1); }
@@ -131,7 +151,10 @@ body { font-family: 'Inter','Noto Sans SC',system-ui,sans-serif; background: var
   border:1px solid rgba(0,240,255,0.4); border-radius:10px;
   display:flex; align-items:center; justify-content:center; flex-shrink:0;
   box-shadow: 0 0 16px rgba(0,240,255,0.25), inset 0 0 8px rgba(0,240,255,0.1);
-  animation: nodeFloat 3s ease-in-out infinite;
+  animation: logoGlowFlash 2.2s ease-in-out infinite;
+}
+[data-theme="light"] .logo-icon {
+  animation-name: logoGlowFlashLight;
 }
 .sidebar-title { font-size:15px; font-weight:700; color:var(--fg); letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap; overflow:hidden; }
 .sidebar.collapsed .sidebar-title { display:none; }
@@ -252,6 +275,40 @@ body { font-family: 'Inter','Noto Sans SC',system-ui,sans-serif; background: var
 .skeleton { background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:8px; }
 .mono { font-family:'JetBrains Mono',monospace; font-size:13px; }
 .badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
+
+/* Transaction Skills tables: compact open link (inline-flex; avoids <a class="btn-primary"> clipping in cells) */
+a.tx-skill-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--neon-cyan);
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(139, 92, 246, 0.18));
+  transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+a.tx-skill-open:hover {
+  border-color: rgba(0, 240, 255, 0.55);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.22);
+  color: var(--fg);
+}
+[data-theme="light"] a.tx-skill-open {
+  border-color: rgba(0, 102, 255, 0.28);
+  color: var(--neon-blue);
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(124, 58, 237, 0.12));
+}
+[data-theme="light"] a.tx-skill-open:hover {
+  border-color: rgba(0, 102, 255, 0.45);
+  box-shadow: 0 0 12px rgba(0, 102, 255, 0.15);
+}
 
 /* Dashboard specific */
 .price-card {
@@ -513,6 +570,10 @@ body { font-family: 'Inter','Noto Sans SC',system-ui,sans-serif; background: var
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
         <span>行情指数</span>
       </a>
+      <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
+        <span>交易Skills</span>
+      </a>
       <a href="#/ai-chat" class="nav-btn" data-page="ai-chat">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>AI 对话</span>
@@ -548,7 +609,7 @@ var I18N = {
   zh: {
     appName:'链上监控',
     nav_dashboard:'仪表盘', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_chat:'AI 对话',
+    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话',
     sidebar_toggle:'收起/展开',
     dash_title:'链上资金监控', dash_sub:'BTC · ETH · USDT 实时行情',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -570,6 +631,11 @@ var I18N = {
     idx_title:'BTC 行情指数', idx_sub:'聚合展示常见 6 个 BTC 周期/温度指数。',
     idx_cur_btc:'当前 BTC', idx_fear_greed:'恐慌贪婪', idx_updated:'更新时间', idx_datasource:'数据源：',
     idx_formula:'计算口径：', idx_source:'来源：',
+    tx_title:'交易Skills 对比', tx_sub:'聚合 6 家交易所官方 Skills 与第三方 Skills，便于快速评估接入价值与风险。',
+    tx_exchange_title:'6 家交易所 Skill 对比', tx_third_title:'第三方 Skill 对比', tx_notes_title:'接入建议',
+    tx_col_exchange:'交易所', tx_col_official:'官方 Skill', tx_col_link:'链接', tx_col_install:'安装命令', tx_col_diff:'接入难度', tx_col_strength:'优势', tx_col_security:'安全机制', tx_col_scope:'覆盖范围', tx_col_score:'匹配度',
+    tx_col_skill:'Skill', tx_col_category:'类别', tx_col_capability:'核心能力', tx_col_fit:'接入匹配度', tx_col_risk:'风险', tx_open:'打开',
+    tx_source:'数据来源：',
     chat_title:'AI 对话', chat_sub:'支持多轮对话', chat_placeholder:'输入您的问题...',
     chat_connected:'已连接', chat_connecting:'连接中…', chat_failed:'连接失败',
     chat_welcome:'你好，我是链上监控 AI 助手。可以问我关于加密货币、链上数据或行情的问题。',
@@ -580,7 +646,7 @@ var I18N = {
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Dashboard', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_chat:'AI Chat',
+    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -602,6 +668,11 @@ var I18N = {
     idx_title:'BTC Market Indices', idx_sub:'6 common BTC cycle/temperature indices.',
     idx_cur_btc:'BTC Price', idx_fear_greed:'Fear & Greed', idx_updated:'Updated', idx_datasource:'Source: ',
     idx_formula:'Formula: ', idx_source:'Source: ',
+    tx_title:'Trading Skills Comparison', tx_sub:'Compare official skills from 6 exchanges and key third-party skills for integration decisions.',
+    tx_exchange_title:'6-Exchange Official Skill Comparison', tx_third_title:'Third-party Skill Comparison', tx_notes_title:'Integration Guidance',
+    tx_col_exchange:'Exchange', tx_col_official:'Official Skill', tx_col_link:'Link', tx_col_install:'Install Command', tx_col_diff:'Difficulty', tx_col_strength:'Strengths', tx_col_security:'Security', tx_col_scope:'Scope', tx_col_score:'Fit',
+    tx_col_skill:'Skill', tx_col_category:'Category', tx_col_capability:'Core Capability', tx_col_fit:'Integration Fit', tx_col_risk:'Risk', tx_open:'Open',
+    tx_source:'Data source: ',
     chat_title:'AI Chat', chat_sub:'Multi-turn conversation', chat_placeholder:'Type your question...',
     chat_connected:'Connected', chat_connecting:'Connecting…', chat_failed:'Failed',
     chat_welcome:'Hi! I\'m your crypto & Web3 AI assistant. Ask me about blockchain, DeFi, NFT, or market data.',
@@ -704,7 +775,7 @@ function applyLang(lang) {
 
   // Update nav labels
   var navMap = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
-    'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'ai-chat':'nav_chat'};
+    'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat'};
   document.querySelectorAll('.nav-btn[data-page]').forEach(function(btn) {
     var span = btn.querySelector('span');
     if (span) span.textContent = t(navMap[btn.dataset.page] || btn.dataset.page);
@@ -747,7 +818,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat'];
+const PAGES = ['dashboard','news','kol-tweets','market-forecast','market-indices','transaction-skills','ai-chat'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1173,6 +1244,111 @@ renderers['market-indices'] = function(el, forceRefresh) {
     if(iBtn) iBtn.addEventListener('click',function(){ clearAutoRefresh(); renderers['market-indices']($('pageContent'), true); });
     startIDXTimer(parseInt(iSel && iSel.value) || 0);
   }).catch(()=>{ el.innerHTML='<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>'; });
+};
+
+/* ─── Transaction Skills ─── */
+renderers['transaction-skills'] = function(el) {
+  fetchJson(apiUrl('/api/transaction-skills', false)).then(d => {
+    var intro = d.intro || {};
+    var exchangeSkills = d.exchangeSkills || [];
+    var thirdPartySkills = d.thirdPartySkills || [];
+    var notes = d.notes || [];
+
+    var whyPoints = (intro.whyPoints || []).length
+      ? '<ul class="notes-list" style="margin-top:10px;">' + intro.whyPoints.map(function(p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>'
+      : '<p style="color:var(--muted);margin-top:10px;">--</p>';
+
+    function txSkillOpenLink(href) {
+      return '<a href="' + esc(href || '#') + '" target="_blank" rel="noopener noreferrer" class="tx-skill-open">' + t('tx_open') + '</a>';
+    }
+
+    var exchangeRows = exchangeSkills.length
+      ? exchangeSkills.map(function(item) {
+          return '<tr>'
+            + '<td class="table-cell" style="font-weight:700;">' + esc(item.exchange) + '</td>'
+            + '<td class="table-cell">' + esc(item.officialSkill) + '</td>'
+            + '<td class="table-cell">' + txSkillOpenLink(item.link) + '</td>'
+            + '<td class="table-cell">' + esc(item.installDifficulty) + '</td>'
+            + '<td class="table-cell">' + esc(item.strengths) + '</td>'
+            + '<td class="table-cell">' + esc(item.security) + '</td>'
+            + '<td class="table-cell">' + esc(item.scope) + '</td>'
+            + '<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">' + esc(String(item.score)) + '/10</td>'
+            + '</tr>';
+        }).join('')
+      : '<tr><td class="table-cell" colspan="8" style="text-align:center;color:var(--muted);">' + t('load_fail') + '</td></tr>';
+
+    var thirdRows = thirdPartySkills.length
+      ? thirdPartySkills.map(function(item) {
+          return '<tr>'
+            + '<td class="table-cell" style="font-weight:700;">' + esc(item.skill) + '</td>'
+            + '<td class="table-cell">' + txSkillOpenLink(item.link) + '</td>'
+            + '<td class="table-cell">' + esc(item.category) + '</td>'
+            + '<td class="table-cell">' + esc(item.coreCapability) + '</td>'
+            + '<td class="table-cell">' + esc(item.integrationFit) + '</td>'
+            + '<td class="table-cell">' + esc(item.risk) + '</td>'
+            + '</tr>';
+        }).join('')
+      : '<tr><td class="table-cell" colspan="6" style="text-align:center;color:var(--muted);">' + t('load_fail') + '</td></tr>';
+
+    var notesHtml = notes.length
+      ? '<ul class="notes-list">' + notes.map(function(n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>'
+      : '<p style="color:var(--muted);">--</p>';
+
+    el.innerHTML = '<div class="page-fade-in">'
+      + '<div class="card" style="margin-bottom:18px;">'
+        + '<div class="stat-label">' + esc(intro.whyTitle || '') + '</div>' + whyPoints
+      + '</div>'
+
+      + '<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;">'
+        + '<div><h1 class="page-title" style="font-size:28px;">' + t('tx_title') + '</h1><p class="page-sub" style="max-width:860px;line-height:1.7;">' + t('tx_sub') + '</p></div>'
+        + '<div class="card" style="padding:12px 16px;border-radius:12px;min-width:280px;">'
+          + '<div class="stat-label">' + t('tx_source') + '</div>'
+          + '<div style="font-size:12px;line-height:1.6;color:var(--fg);">' + esc(d.dataSource || '--') + '</div>'
+          + '<div class="stat-meta" style="margin-top:8px;">' + t('idx_updated') + ' ' + fmtTime(d.updatedAt) + '</div>'
+        + '</div>'
+      + '</div>'
+
+      + '<div class="panel">'
+        + '<h2>' + t('tx_exchange_title') + '</h2>'
+        + '<div style="overflow-x:auto;border-radius:10px;margin-top:14px;">'
+          + '<table style="width:100%;border-collapse:collapse;min-width:1060px;">'
+            + '<thead><tr>'
+              + '<th class="table-header">' + t('tx_col_exchange') + '</th>'
+              + '<th class="table-header">' + t('tx_col_official') + '</th>'
+              + '<th class="table-header">' + t('tx_col_link') + '</th>'
+              + '<th class="table-header">' + t('tx_col_diff') + '</th>'
+              + '<th class="table-header">' + t('tx_col_strength') + '</th>'
+              + '<th class="table-header">' + t('tx_col_security') + '</th>'
+              + '<th class="table-header">' + t('tx_col_scope') + '</th>'
+              + '<th class="table-header">' + t('tx_col_score') + '</th>'
+            + '</tr></thead>'
+            + '<tbody>' + exchangeRows + '</tbody>'
+          + '</table>'
+        + '</div>'
+      + '</div>'
+
+      + '<div class="panel">'
+        + '<h2>' + t('tx_third_title') + '</h2>'
+        + '<div style="overflow-x:auto;border-radius:10px;margin-top:14px;">'
+          + '<table style="width:100%;border-collapse:collapse;min-width:820px;">'
+            + '<thead><tr>'
+              + '<th class="table-header">' + t('tx_col_skill') + '</th>'
+              + '<th class="table-header">' + t('tx_col_link') + '</th>'
+              + '<th class="table-header">' + t('tx_col_category') + '</th>'
+              + '<th class="table-header">' + t('tx_col_capability') + '</th>'
+              + '<th class="table-header">' + t('tx_col_fit') + '</th>'
+              + '<th class="table-header">' + t('tx_col_risk') + '</th>'
+            + '</tr></thead>'
+            + '<tbody>' + thirdRows + '</tbody>'
+          + '</table>'
+        + '</div>'
+      + '</div>'
+
+      + '<div class="panel"><h2>' + t('tx_notes_title') + '</h2>' + notesHtml + '</div>'
+    + '</div>';
+  }).catch(function() {
+    el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">' + t('load_fail') + '</div>';
+  });
 };
 
 /* ─── AI Chat ─── */

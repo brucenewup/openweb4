@@ -55,4 +55,23 @@ class ApiControllerTest {
         mockMvc.perform(get("/api/debug/proxy-test"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void transactionSkillsReturnsExchangeAndThirdPartyComparisons() throws Exception {
+        mockMvc.perform(get("/api/transaction-skills").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.updatedAt").exists())
+                .andExpect(jsonPath("$.dataSource").isString())
+                .andExpect(jsonPath("$.intro.whyTitle").isString())
+                .andExpect(jsonPath("$.intro.whyPoints").isArray())
+                .andExpect(jsonPath("$.exchangeSkills").isArray())
+                .andExpect(jsonPath("$.exchangeSkills[0].exchange").exists())
+                .andExpect(jsonPath("$.exchangeSkills[0].link").isString())
+                .andExpect(jsonPath("$.exchangeSkills[0].installCommand").isString())
+                .andExpect(jsonPath("$.thirdPartySkills").isArray())
+                .andExpect(jsonPath("$.thirdPartySkills[0].skill").exists())
+                .andExpect(jsonPath("$.thirdPartySkills[0].link").isString())
+                .andExpect(jsonPath("$.thirdPartySkills[0].installCommand").isString())
+                .andExpect(jsonPath("$.notes").isArray());
+    }
 }
