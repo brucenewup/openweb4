@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="OpenWeb4">
+  <defs>
+    <linearGradient id="ow4LogoG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="ow4LogoFill" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.28"/>
+    </linearGradient>
+  </defs>
+  <circle cx="24" cy="24" r="20" fill="none" stroke="url(#ow4LogoG)" stroke-width="0.65" opacity="0.28"/>
+  <circle cx="24" cy="24" r="20" fill="none" stroke="url(#ow4LogoG)" stroke-width="0.4" opacity="0.15" stroke-dasharray="3 5"/>
+  <path d="M2.5 28 C1 20 5.5 13 11 14.5 C14 15.5 15.5 19 14 23.5 C12.5 28 8 31 5 30 C3 29.5 2.5 28 2.5 28 Z" fill="none" stroke="url(#ow4LogoG)" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M45.5 28 C47 20 42.5 13 37 14.5 C34 15.5 32.5 19 34 23.5 C35.5 28 40 31 43 30 C45 29.5 45.5 28 45.5 28 Z" fill="none" stroke="url(#ow4LogoG)" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6 22 Q9 17 12 19" fill="none" stroke="url(#ow4LogoG)" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+  <path d="M42 22 Q39 17 36 19" fill="none" stroke="url(#ow4LogoG)" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+  <path d="M24 11 L33.5 16.5 L33.5 27.5 L24 33 L14.5 27.5 L14.5 16.5 Z" fill="url(#ow4LogoFill)" stroke="url(#ow4LogoG)" stroke-width="1.15" stroke-linejoin="round"/>
+  <path d="M24 17 L29 20 M24 17 L19 20 M19 24 L24 27 M29 24 L24 27" stroke="url(#ow4LogoG)" stroke-width="0.95" stroke-linecap="round" opacity="0.9"/>
+  <circle cx="24" cy="22" r="2.4" fill="#00f0ff"/>
+  <circle cx="18.5" cy="20" r="1.35" fill="#8b5cf6"/>
+  <circle cx="29.5" cy="20" r="1.35" fill="#8b5cf6"/>
+  <circle cx="18.5" cy="26" r="1.35" fill="#00f0ff" opacity="0.9"/>
+  <circle cx="29.5" cy="26" r="1.35" fill="#8b5cf6" opacity="0.9"/>
+  <path d="M24 11 L24 6.5" stroke="url(#ow4LogoG)" stroke-width="1.1" stroke-linecap="round"/>
+  <circle cx="24" cy="5" r="1.6" fill="#00f0ff" opacity="0.95"/>
+  <path d="M20.5 7 L24 4 L27.5 7" fill="none" stroke="url(#ow4LogoG)" stroke-width="0.75" stroke-linecap="round" opacity="0.7"/>
+</svg>
