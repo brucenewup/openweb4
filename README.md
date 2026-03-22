@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="../assets/screenshot-dashboard-zh.png" alt="OpenWeb4 仪表盘（中文界面）" width="820" />
+  <img src="assets/screenshot-dashboard-zh.png" alt="OpenWeb4 仪表盘（中文界面）" width="820" />
 </p>
 <p align="center"><sub>默认 Web UI：Spring Boot SPA · 中文 · 仪表盘</sub></p>
 
