@@ -457,14 +457,67 @@ function AiChat() {
   )
 }
 
-// ─── Nav items config ─────────────────────────────────────────
-type Page = 'dashboard' | 'news' | 'kol-tweets' | 'ai-chat'
+// ─── Claw导航数据 ─────────────────────────────────────────────
+interface ClawNavLink { name: string; desc: string; url: string }
+interface ClawNavCat { cat: string; links: ClawNavLink[] }
+
+const CLAW_NAV_DATA: ClawNavCat[] = [
+  {cat:'百虾大战',links:[{name:'OpenClaw 官网',desc:'开源、本地优先的自主 AI 助手，运行在你的电脑或服务器上',url:'https://openclaw.ai/'},{name:'官方GitHub',desc:'收集了OpenClaw的源代码，方便用户查阅、参考',url:'https://github.com/openclaw/openclaw'},{name:'Kimi Claw（云端）',desc:'集成全球爆火的开源智能体框架OpenClaw',url:'https://www.kimi.com/bot'},{name:'MaxClaw（云端）',desc:'10 秒内完成OpenClaw云端部署，无需配置服务器，零维护负担',url:'https://agent.minimaxi.com/max-claw'},{name:'飞书OpenClaw',desc:'提供原版 OpenClaw 完整能力，独特个性、长期记忆，内置飞书官方插件',url:'https://openclaw.feishu.cn/home'},{name:'ArkClaw（云端）',desc:'提供模型训练、推理、评测、精调等全方位功能与服务',url:'https://www.volcengine.com/experience/ark?mode=claw'},{name:'扣子Coze（云端）',desc:'字节旗下AI Agent开发平台，让每个人都能轻松创建自己的AI机器人',url:'https://code.coze.cn/home'},{name:'DuClaw（云端）',desc:'免除镜像选择、服务器部署及API Key配置等繁琐环节，AI智能体即开即用',url:'https://cloud.baidu.com/product/duclaw.html'},{name:'Xiaomi MiMo Claw（云端）',desc:'依托小米最新大模型打造，实现一键部署OpenClaw智能体',url:'https://aistudio.xiaomimimo.com/'},{name:'StepClaw（云端）',desc:'阶跃星辰推出基于OpenClaw打造的云端AI助手',url:'https://www.stepfun.com/openclaw'},{name:'AstronClaw（云端）',desc:'科大讯飞推出的云端部署OpenClaw，支持一键部署、全天候在线运行',url:'https://agent.xfyun.cn/astron-claw'},{name:'Happycapy（云端）',desc:'一台面向所有人设计的云端 Agent 原生计算机',url:'https://happycapy.ai/'},{name:'Qclaw（本地）',desc:'支持微信直联，扫码绑定后，能随时随地通过微信发指令，远程操控电脑',url:'https://claw.guanjia.qq.com/'},{name:'LobsterAI 有道龙虾（本地）',desc:'7×24小时帮你干活的全场景个人助理 Agent',url:'https://lobsterai.youdao.com/'},{name:'WorkBuddy（本地）',desc:'AI 原生的桌面智能体工作台，一句指令即可完成数据处理、内容创作与深度分析',url:'https://www.codebuddy.cn/work/'},{name:'AutoClaw（本地）',desc:'提供飞书集成、模型热插拔、50+技能与AutoGLM浏览器自动化能力',url:'https://autoglm.zhipuai.cn/autoclaw/'},{name:'悟空（本地）',desc:'阿里巴巴发布的企业级AI原生工作平台',url:'https://www.dingtalk.com/wukong'},{name:'360安全龙虾（本地）',desc:'国内首个以安全模式为核心设计的OpenClaw智能体产品',url:'https://claw.360.cn/'},{name:'JVS Claw',desc:'阿里云推出的多 Agent 智能体协作平台，提供免部署免配置的极简体验',url:'https://jvs.wuying.aliyun.com/'}]},
+  {cat:'云端部署',links:[{name:'MaxClaw',desc:'10秒完成OpenClaw云端部署',url:'https://agent.minimaxi.com/max-claw'},{name:'ArkClaw',desc:'火山引擎云端部署',url:'https://www.volcengine.com/experience/ark?mode=claw'},{name:'StepClaw',desc:'阶跃星辰云端OpenClaw',url:'https://www.stepfun.com/openclaw'},{name:'AstronClaw',desc:'科大讯飞云端部署',url:'https://agent.xfyun.cn/astron-claw'},{name:'DuClaw',desc:'百度云端部署',url:'https://cloud.baidu.com/product/duclaw.html'},{name:'Happycapy',desc:'云端 Agent 原生计算机',url:'https://happycapy.ai/'}]},
+  {cat:'教程合集',links:[{name:'OpenClaw 官方文档',desc:'官方使用文档',url:'https://docs.openclaw.ai/'},{name:'ClawHub',desc:'技能与插件市场',url:'https://clawhub.com/'}]},
+  {cat:'常用AI',links:[{name:'ChatGPT',desc:'OpenAI旗下AI助手',url:'https://chatgpt.com/'},{name:'Claude',desc:'Anthropic旗下AI助手',url:'https://claude.ai/'},{name:'Gemini',desc:'Google旗下AI助手',url:'https://gemini.google.com/'},{name:'Kimi',desc:'月之暗面AI助手',url:'https://kimi.moonshot.cn/'},{name:'豆包',desc:'字节跳动AI助手',url:'https://www.doubao.com/'},{name:'通义千问',desc:'阿里云AI助手',url:'https://tongyi.aliyun.com/'}]},
+  {cat:'Coding Plan',links:[{name:'Claude Code',desc:'Anthropic代码助手',url:'https://claude.ai/code'},{name:'Cursor',desc:'AI代码编辑器',url:'https://cursor.sh/'},{name:'Windsurf',desc:'Codeium推出的AI IDE',url:'https://codeium.com/windsurf'},{name:'GitHub Copilot',desc:'GitHub官方AI编程助手',url:'https://github.com/features/copilot'}]},
+  {cat:'Maas平台',links:[{name:'火山引擎',desc:'字节旗下MaaS平台',url:'https://www.volcengine.com/'},{name:'阿里云百炼',desc:'阿里云AI模型平台',url:'https://bailian.aliyun.com/'},{name:'百度千帆',desc:'百度AI开发平台',url:'https://qianfan.cloud.baidu.com/'},{name:'腾讯混元',desc:'腾讯AI平台',url:'https://hunyuan.tencent.com/'}]},
+  {cat:'AI大模型',links:[{name:'OpenAI',desc:'GPT系列模型',url:'https://openai.com/'},{name:'Anthropic',desc:'Claude系列模型',url:'https://anthropic.com/'},{name:'Google DeepMind',desc:'Gemini系列模型',url:'https://deepmind.google/'},{name:'Meta AI',desc:'Llama系列开源模型',url:'https://ai.meta.com/'},{name:'DeepSeek',desc:'深度求索大模型',url:'https://www.deepseek.com/'},{name:'智谱AI',desc:'GLM系列模型',url:'https://zhipuai.cn/'}]},
+  {cat:'Skills市场',links:[{name:'ClawHub',desc:'OpenClaw技能市场',url:'https://clawhub.com/'},{name:'Smithery',desc:'MCP技能市场',url:'https://smithery.ai/'},{name:'MCP.so',desc:'MCP协议技能目录',url:'https://mcp.so/'}]},
+  {cat:'Agent生态',links:[{name:'LangChain',desc:'AI应用开发框架',url:'https://www.langchain.com/'},{name:'AutoGen',desc:'微软多Agent框架',url:'https://microsoft.github.io/autogen/'},{name:'CrewAI',desc:'多Agent协作框架',url:'https://www.crewai.com/'},{name:'Dify',desc:'开源LLM应用开发平台',url:'https://dify.ai/'},{name:'n8n',desc:'工作流自动化平台',url:'https://n8n.io/'}]},
+  {cat:'Agent支付',links:[{name:'Stripe',desc:'全球领先支付平台',url:'https://stripe.com/'},{name:'ClawCard',desc:'首个为Agent提供的统一凭证系统',url:'https://www.clawcard.sh/'},{name:'Lobster.cash',desc:'允许你的 Agent 支付任何费用',url:'https://www.lobster.cash/'},{name:'Coinbase AgentKit',desc:'通过AgentKit赋能AI代理进行自主支付',url:'https://www.coinbase.com/zh-cn/developer-platform/products/agentkit'},{name:'ClawVault',desc:'一个平台保障你所有的 AI Agent 支出',url:'https://clawvault.cc/'}]},
+  {cat:'币圈生态',links:[{name:'OKX Agent Trade Kit',desc:'将 AI 助手与 OKX 账户直接连接',url:'https://www.okx.com/zh-hans/agent-tradekit'},{name:'Binance Skills Hub',desc:'让 AI 代理能够原生访问加密货币',url:'https://www.binance.com/zh-CN/skills'},{name:'GetClaw',desc:'Bitget 出品的AI 交易自主智能体',url:'https://www.bitget.com/zh-CN/activity-hub/get-claw'},{name:'HTX AI Skills',desc:'面向 AI Agent 生态推出的开放交易协议',url:'https://www.htx.com/zh-cn/skills'},{name:'GateClaw',desc:'Gate 推出的 AI Web3 Agent 工作平台',url:'https://www.gate.com/zh/gateclaw'},{name:'Bybit AI Hub',desc:'接入 Bybit 全栈交易引擎的 AI 助手',url:'https://www.bybit.com/zh-MY/ai'},{name:'COIN CLAW',desc:'你的 Web3 世界 AI 常驻特工',url:'https://www.aicoin.com/zh-Hans/coinclaw'}]}
+]
+
+// ─── Page: ClawNav ────────────────────────────────────────────
+type Page = 'dashboard' | 'news' | 'kol-tweets' | 'ai-chat' | 'claw-nav'
+
+function ClawNav() {
+  const [activeCat, setActiveCat] = useState(CLAW_NAV_DATA[0].cat)
+  const current = CLAW_NAV_DATA.find(c => c.cat === activeCat) || CLAW_NAV_DATA[0]
+  return (
+    <main className="page-content">
+      <div style={{display:'flex',gap:'24px',height:'100%',minHeight:0}}>
+        <div style={{width:'140px',flexShrink:0,display:'flex',flexDirection:'column',gap:'4px'}}>
+          {CLAW_NAV_DATA.map(c => (
+            <button key={c.cat}
+              onClick={() => setActiveCat(c.cat)}
+              style={{padding:'8px 12px',borderRadius:'8px',border:'none',cursor:'pointer',textAlign:'left',fontSize:'13px',fontWeight:activeCat===c.cat?600:400,background:activeCat===c.cat?'var(--accent-color, #6366f1)':'transparent',color:activeCat===c.cat?'#fff':'var(--text-primary)',transition:'all 0.15s'}}
+            >{c.cat} <span style={{fontSize:'11px',opacity:0.6}}>({c.links.length})</span></button>
+          ))}
+        </div>
+        <div style={{flex:1,overflowY:'auto'}}>
+          <h2 style={{fontSize:'16px',fontWeight:600,marginBottom:'16px',color:'var(--text-primary)'}}>{current.cat}</h2>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'12px'}}>
+            {current.links.map(link => (
+              <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer"
+                style={{display:'block',padding:'14px 16px',borderRadius:'10px',border:'1px solid var(--border-color, #e5e7eb)',background:'var(--card-bg, #fff)',textDecoration:'none',transition:'all 0.15s',cursor:'pointer'}}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)')}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow='none')}
+              >
+                <div style={{fontWeight:600,fontSize:'14px',color:'var(--text-primary)',marginBottom:'6px'}}>{link.name}</div>
+                <div style={{fontSize:'12px',color:'var(--text-secondary, #6b7280)',lineHeight:'1.5'}}>{link.desc}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
 
 const NAV_ITEMS: { page: Page; label: string; icon: React.ReactNode }[] = [
   { page: 'dashboard', label: '仪表盘', icon: <svg key="d" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> },
   { page: 'news', label: '行情新闻', icon: <svg key="n" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg> },
   { page: 'kol-tweets', label: '大V推文', icon: <svg key="t" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> },
   { page: 'ai-chat', label: 'AI 对话', icon: <svg key="c" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+  { page: 'claw-nav', label: 'Claw导航', icon: <svg key="nav" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
 ]
 
 // ─── App ───────────────────────────────────────────────────────
@@ -568,6 +621,7 @@ export default function App() {
         {page === 'news' && <News lang={lang} />}
         {page === 'kol-tweets' && <KolTweets lang={lang} kolAuthors={kolAuthors} subscribed={subscribed} onToggle={toggleKol} />}
         {page === 'ai-chat' && <AiChat />}
+        {page === 'claw-nav' && <ClawNav />}
       </div>
     </div>
   )
