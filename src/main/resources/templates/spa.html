@@ -586,6 +586,10 @@ a.tx-skill-open:hover {
     </div>
 
     <nav class="sidebar-nav" id="sidebarNav">
+      <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
+        <span>交易Skills</span>
+      </a>
       <a href="#/dashboard" class="nav-btn" data-page="dashboard">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         <span>仪表盘</span>
@@ -605,10 +609,6 @@ a.tx-skill-open:hover {
       <a href="#/market-indices" class="nav-btn" data-page="market-indices">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
         <span>行情指数</span>
-      </a>
-      <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
-        <span>交易Skills</span>
       </a>
       <a href="#/ai-chat" class="nav-btn" data-page="ai-chat">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -853,7 +853,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','news','kol-tweets','market-forecast','market-indices','transaction-skills','ai-chat'];
+const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
