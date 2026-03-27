@@ -614,6 +614,10 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>AI 对话</span>
       </a>
+      <a href="#/contract" class="nav-btn" data-page="contract">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/><circle cx="18" cy="7" r="2"/><circle cx="6" cy="11" r="2"/></svg>
+        <span>合约监控</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -809,7 +813,7 @@ if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(tr
 
 /* ═══════════════════════ Language Switch ═══════════════════════ */
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
-  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat'};
+  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'contract':'nav_contract'};
 
 /** Sync sidebar nav text, lang toggle UI, html[lang] — brand "OpenWeb4" stays fixed (not localized) */
 function syncSidebarI18n() {
@@ -853,7 +857,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat'];
+const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat','contract'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1751,6 +1755,98 @@ renderers['ai-chat'] = function(el) {
   var observer = new MutationObserver(function() {});
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
+
+/* ─── Contract Monitor ─── */
+var contractState = { symbol: 'BTCUSDT', timer: null };
+
+renderers['contract'] = function(el) {
+  el.innerHTML =
+    '<div style="padding:24px 28px;max-width:900px;margin:0 auto;">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">'
+    +'<div><h1 style="font-size:22px;font-weight:700;color:var(--fg);margin:0;">📊 合约多空监控</h1>'
+    +'<p style="font-size:12px;color:var(--muted);margin-top:4px;font-family:monospace;">数据来源：Binance Futures · 每60秒自动刷新</p></div>'
+    +'<div style="display:flex;gap:8px;">'
+    +'<button id="cBtc" class="btn-sm" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;">BTC</button>'
+    +'<button id="cEth" class="btn-sm" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;">ETH</button>'
+    +'<button id="cRefresh" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-size:13px;">↻</button>'
+    +'</div></div>'
+    +'<div id="contractContent" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">'
+    +'<div style="color:var(--muted);text-align:center;padding:40px;grid-column:1/-1;">加载中...</div>'
+    +'</div></div>';
+
+  function fmtOI(v) {
+    if (v >= 1e9) return (v/1e9).toFixed(2) + 'B';
+    if (v >= 1e6) return (v/1e6).toFixed(2) + 'M';
+    return v.toFixed(0);
+  }
+
+  function loadContract(sym) {
+    contractState.symbol = sym;
+    fetch('/api/contract?symbol=' + sym + 'USDT&_=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        if (d.error) {
+          document.getElementById('contractContent').innerHTML =
+            '<div style="color:var(--danger,#f87171);text-align:center;padding:40px;grid-column:1/-1;">⚠️ ' + d.error + '</div>';
+          return;
+        }
+        var longPct = d.longAccount ? d.longAccount.toFixed(1) : (d.longShortRatio/(1+d.longShortRatio)*100).toFixed(1);
+        var shortPct = d.shortAccount ? d.shortAccount.toFixed(1) : (100 - longPct);
+        var frColor = d.fundingRate >= 0 ? 'var(--green,#4ade80)' : 'var(--red,#f87171)';
+        var frSign = d.fundingRate >= 0 ? '+' : '';
+        var takerColor = d.takerBuyRatio >= 1 ? 'var(--green,#4ade80)' : 'var(--red,#f87171)';
+        document.getElementById('contractContent').innerHTML =
+          '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">'
+          +'<div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:monospace;">多空账户比</div>'
+          +'<div style="display:flex;align-items:center;gap:16px;margin-bottom:10px;">'
+          +'<span style="font-size:32px;font-weight:800;color:var(--green,#4ade80);">'+longPct+'%</span>'
+          +'<span style="font-size:20px;color:var(--muted);">vs</span>'
+          +'<span style="font-size:32px;font-weight:800;color:var(--red,#f87171);">'+shortPct+'%</span></div>'
+          +'<div style="display:flex;gap:12px;">'
+          +'<span style="font-size:12px;color:var(--green,#4ade80);">● 多仓</span>'
+          +'<span style="font-size:12px;color:var(--red,#f87171);">● 空仓</span>'
+          +'<span style="font-size:12px;color:var(--muted);">比值: '+d.longShortRatio.toFixed(3)+'</span></div>'
+          +'<div style="margin-top:12px;background:var(--bg);border-radius:6px;height:8px;overflow:hidden;">'
+          +'<div style="width:'+longPct+'%;height:100%;background:linear-gradient(90deg,var(--green,#4ade80),rgba(74,222,128,0.6));"></div></div>'
+          +'</div>'
+          +'<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">'
+          +'<div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:monospace;">未平仓合约量</div>'
+          +'<div style="font-size:28px;font-weight:800;color:var(--fg);">'+fmtOI(d.openInterest)+'</div>'
+          +'<div style="font-size:12px;color:var(--muted);margin-top:6px;">'+sym+'USDT · Open Interest</div>'
+          +'</div>'
+          +'<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">'
+          +'<div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:monospace;">资金费率</div>'
+          +'<div style="font-size:28px;font-weight:800;color:'+frColor+';">'+frSign+d.fundingRate.toFixed(4)+'%</div>'
+          +'<div style="font-size:12px;color:var(--muted);margin-top:6px;">'+( d.fundingRate >= 0 ? '多头支付空头 · 偏多市场' : '空头支付多头 · 偏空市场')+'</div>'
+          +'</div>'
+          +'<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">'
+          +'<div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:monospace;">主动买卖量比 (Taker)</div>'
+          +'<div style="font-size:28px;font-weight:800;color:'+takerColor+';">'+d.takerBuyRatio.toFixed(3)+'</div>'
+          +'<div style="font-size:12px;color:var(--muted);margin-top:6px;">'+( d.takerBuyRatio >= 1 ? '主动买盘 > 卖盘 · 偏多' : '主动卖盘 > 买盘 · 偏空')+'</div>'
+          +'</div>';
+      })
+      .catch(function(e) {
+        document.getElementById('contractContent').innerHTML =
+          '<div style="color:var(--danger,#f87171);text-align:center;padding:40px;grid-column:1/-1;">网络错误: ' + e.message + '</div>';
+      });
+  }
+
+  function setActive(sym) {
+    document.getElementById('cBtc').style.borderColor = sym==='BTC' ? 'var(--neon-cyan)' : 'var(--border)';
+    document.getElementById('cEth').style.borderColor = sym==='ETH' ? 'var(--neon-cyan)' : 'var(--border)';
+  }
+
+  document.getElementById('cBtc').addEventListener('click', function(){ setActive('BTC'); loadContract('BTC'); });
+  document.getElementById('cEth').addEventListener('click', function(){ setActive('ETH'); loadContract('ETH'); });
+  document.getElementById('cRefresh').addEventListener('click', function(){ loadContract(contractState.symbol); });
+
+  setActive('BTC');
+  loadContract('BTC');
+
+  if (contractState.timer) clearInterval(contractState.timer);
+  contractState.timer = setInterval(function(){ loadContract(contractState.symbol); }, 60000);
+  el._contractCleanup = function(){ if(contractState.timer){ clearInterval(contractState.timer); contractState.timer=null; } };
+};
 
 /* ═══════════════════════ Init ═══════════════════════ */
 if (!location.hash || location.hash === '#' || location.hash === '#/') {
