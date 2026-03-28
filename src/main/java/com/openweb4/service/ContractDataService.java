@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import org.springframework.context.annotation.Lazy;
 
 @Service
 public class ContractDataService {
@@ -24,11 +25,13 @@ public class ContractDataService {
     private static final long CACHE_TTL_MS = 60_000L;
 
     private final OkHttpClient client;
+    private final ContractHistoryService contractHistoryService;
     private final Map<String, ContractDataDto> cache = new ConcurrentHashMap<>();
     private final Map<String, Long> cacheTime = new ConcurrentHashMap<>();
 
-    public ContractDataService(OkHttpClient client) {
+    public ContractDataService(OkHttpClient client, @Lazy ContractHistoryService contractHistoryService) {
         this.client = client;
+        this.contractHistoryService = contractHistoryService;
     }
 
     public ContractDataDto getContractData(String symbol) {
@@ -40,6 +43,7 @@ public class ContractDataService {
         ContractDataDto dto = fetchFromBinance(key);
         cache.put(key, dto);
         cacheTime.put(key, System.currentTimeMillis());
+        contractHistoryService.record(key, dto);
         return dto;
     }
 

@@ -1757,22 +1757,32 @@ renderers['ai-chat'] = function(el) {
 })();
 
 /* ─── Contract Monitor ─── */
-var contractState = { symbol: 'BTCUSDT', timer: null };
+var contractState = { symbol: 'BTC' };
 
 renderers['contract'] = function(el) {
+  var prevSel = document.getElementById('contractAutoRefresh');
+  var prevSec = prevSel ? parseInt(prevSel.value) : 60;
   el.innerHTML =
     '<div style="padding:24px 28px;max-width:900px;margin:0 auto;">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:20px;">'
     +'<div><h1 style="font-size:22px;font-weight:700;color:var(--fg);margin:0;">📊 合约多空监控</h1>'
-    +'<p style="font-size:12px;color:var(--muted);margin-top:4px;font-family:monospace;">数据来源：Binance Futures · 每60秒自动刷新</p></div>'
-    +'<div style="display:flex;gap:8px;">'
+    +'<p style="font-size:12px;color:var(--muted);margin-top:4px;font-family:monospace;">数据来源：Binance Futures 大户持仓比</p></div>'
+    +'<div style="display:flex;align-items:center;gap:8px;">'
     +'<button id="cBtc" class="btn-sm" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;">BTC</button>'
     +'<button id="cEth" class="btn-sm" style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;">ETH</button>'
-    +'<button id="cRefresh" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;font-size:13px;">↻</button>'
+    +'<span style="font-size:12px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">AUTO</span>'
+    +'<select id="contractAutoRefresh" class="select-cyber"><option value="0">OFF</option><option value="30">30s</option><option value="60" selected>60s</option><option value="300">5m</option></select>'
+    +'<span id="contractCountdown" style="font-size:12px;color:var(--neon-cyan);min-width:40px;font-family:\'JetBrains Mono\',monospace;"></span>'
+    +'<button id="cRefresh" class="btn-primary">↻ 刷新</button>'
     +'</div></div>'
     +'<div id="contractContent" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">'
     +'<div style="color:var(--muted);text-align:center;padding:40px;grid-column:1/-1;">加载中...</div>'
-    +'</div></div>';
+    +'</div>'
+    +'<div class="card" style="margin-top:16px;">'
+    +'<h2 class="chart-title" style="margin-bottom:16px;">📈 多空占比历史走势</h2>'
+    +'<div id="contractHistoryWrap"><div style="color:var(--muted);text-align:center;padding:20px;font-size:13px;">数据积累中，请稍候...</div></div>'
+    +'</div>'
+    +'</div>';
 
   function fmtOI(v) {
     if (v >= 1e9) return (v/1e9).toFixed(2) + 'B';
@@ -1824,6 +1834,7 @@ renderers['contract'] = function(el) {
           +'<div style="font-size:28px;font-weight:800;color:'+takerColor+';">'+d.takerBuyRatio.toFixed(3)+'</div>'
           +'<div style="font-size:12px;color:var(--muted);margin-top:6px;">'+( d.takerBuyRatio >= 1 ? '主动买盘 > 卖盘 · 偏多' : '主动卖盘 > 买盘 · 偏空')+'</div>'
           +'</div>';
+        loadHistory(sym);
       })
       .catch(function(e) {
         document.getElementById('contractContent').innerHTML =
@@ -1836,16 +1847,89 @@ renderers['contract'] = function(el) {
     document.getElementById('cEth').style.borderColor = sym==='ETH' ? 'var(--neon-cyan)' : 'var(--border)';
   }
 
-  document.getElementById('cBtc').addEventListener('click', function(){ setActive('BTC'); loadContract('BTC'); });
-  document.getElementById('cEth').addEventListener('click', function(){ setActive('ETH'); loadContract('ETH'); });
-  document.getElementById('cRefresh').addEventListener('click', function(){ loadContract(contractState.symbol); });
+  var contractHistoryChart = null;
+
+  function loadHistory(sym) {
+    fetch('/api/contract/history?symbol=' + sym + '&_=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var wrap = document.getElementById('contractHistoryWrap');
+        if (!wrap) return;
+        if (!data || data.length < 2) {
+          wrap.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;font-size:13px;">数据积累中，请稍候...</div>';
+          if (contractHistoryChart) { contractHistoryChart.destroy(); contractHistoryChart = null; }
+          return;
+        }
+        var tc = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#8892a4';
+        var gc = 'rgba(255,255,255,0.06)';
+        var labels = data.map(function(s){
+          var d = new Date(s.timestamp);
+          return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+        });
+        var longData = data.map(function(s){ return s.longAccount ? +s.longAccount.toFixed(2) : +((s.longShortRatio/(1+s.longShortRatio))*100).toFixed(2); });
+        var shortData = data.map(function(s){ return s.shortAccount ? +s.shortAccount.toFixed(2) : +(100 - longData[0]).toFixed(2); });
+        if (contractHistoryChart) { contractHistoryChart.destroy(); contractHistoryChart = null; }
+        wrap.innerHTML = '<canvas id="contractHistoryChart" height="160"></canvas>';
+        var ctx = document.getElementById('contractHistoryChart').getContext('2d');
+        contractHistoryChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {label:'多头占比%', data:longData, borderColor:'rgba(0,255,136,0.8)', backgroundColor:'rgba(0,255,136,0.08)', borderWidth:2, pointRadius:2, tension:0.3, fill:false},
+              {label:'空头占比%', data:shortData, borderColor:'rgba(255,51,102,0.8)', backgroundColor:'rgba(255,51,102,0.08)', borderWidth:2, pointRadius:2, tension:0.3, fill:false}
+            ]
+          },
+          options:{
+            responsive:true,
+            interaction:{mode:'index',intersect:false},
+            plugins:{
+              legend:{labels:{color:tc,font:{size:11,family:"'JetBrains Mono',monospace"},boxWidth:12,padding:16}},
+              tooltip:{backgroundColor:'rgba(17,24,39,0.95)',titleColor:'#00f0ff',bodyColor:'#e8edf5',borderColor:'rgba(0,240,255,0.2)',borderWidth:1,cornerRadius:8,padding:12}
+            },
+            scales:{
+              x:{grid:{color:gc},ticks:{color:tc,font:{size:10,family:"'JetBrains Mono',monospace"},maxTicksLimit:10}},
+              y:{grid:{color:gc},ticks:{color:tc,font:{size:10,family:"'JetBrains Mono',monospace"}},min:0,max:100}
+            }
+          }
+        });
+        activeCharts.push(contractHistoryChart);
+      })
+      .catch(function(){});
+  }
+
+  function startContractTimer(sec) {
+    clearAutoRefresh();
+    var cd = document.getElementById('contractCountdown');
+    if (cd) cd.textContent = '';
+    if (!sec) return;
+    var counter = sec;
+    if (cd) cd.textContent = counter + 's';
+    autoRefreshTimer = setInterval(function(){
+      counter--;
+      if (cd) cd.textContent = counter + 's';
+      if (counter <= 0) {
+        clearAutoRefresh();
+        loadContract(contractState.symbol);
+      }
+    }, 1000);
+  }
+
+  var cSel = document.getElementById('contractAutoRefresh');
+  var cBtn = document.getElementById('cRefresh');
+  if (cSel) cSel.value = String(prevSec);
+  if (cSel) cSel.addEventListener('change', function(){ startContractTimer(parseInt(cSel.value)); });
+  if (cBtn) cBtn.addEventListener('click', function(){ clearAutoRefresh(); loadContract(contractState.symbol); });
+
+  document.getElementById('cBtc').addEventListener('click', function(){ setActive('BTC'); contractState.symbol='BTC'; clearAutoRefresh(); loadContract('BTC'); if(cSel) startContractTimer(parseInt(cSel.value)); });
+  document.getElementById('cEth').addEventListener('click', function(){ setActive('ETH'); contractState.symbol='ETH'; clearAutoRefresh(); loadContract('ETH'); if(cSel) startContractTimer(parseInt(cSel.value)); });
 
   setActive('BTC');
+  contractState.symbol = 'BTC';
   loadContract('BTC');
+  startContractTimer(prevSec);
 
-  if (contractState.timer) clearInterval(contractState.timer);
-  contractState.timer = setInterval(function(){ loadContract(contractState.symbol); }, 60000);
-  el._contractCleanup = function(){ if(contractState.timer){ clearInterval(contractState.timer); contractState.timer=null; } };
+  el._contractCleanup = function(){ clearAutoRefresh(); if(contractHistoryChart){ contractHistoryChart.destroy(); contractHistoryChart=null; } };
 };
 
 /* ═══════════════════════ Init ═══════════════════════ */
