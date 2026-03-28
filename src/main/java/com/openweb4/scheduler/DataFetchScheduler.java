@@ -1,5 +1,6 @@
 package com.openweb4.scheduler;
 
+import com.openweb4.service.ContractDataService;
 import com.openweb4.service.CryptoPriceService;
 import com.openweb4.service.NewsService;
 import com.openweb4.service.WhaleTrackingService;
@@ -18,15 +19,29 @@ public class DataFetchScheduler {
     private final WhaleTrackingService whaleTrackingService;
     private final NewsService newsService;
     private final TweetService tweetService;
+    private final ContractDataService contractDataService;
 
     public DataFetchScheduler(CryptoPriceService cryptoPriceService,
                               WhaleTrackingService whaleTrackingService,
                               NewsService newsService,
-                              TweetService tweetService) {
+                              TweetService tweetService,
+                              ContractDataService contractDataService) {
         this.cryptoPriceService = cryptoPriceService;
         this.whaleTrackingService = whaleTrackingService;
         this.newsService = newsService;
         this.tweetService = tweetService;
+        this.contractDataService = contractDataService;
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void fetchContractData() {
+        log.debug("Fetching contract data (BTC/ETH)");
+        try {
+            contractDataService.getContractData("BTCUSDT");
+            contractDataService.getContractData("ETHUSDT");
+        } catch (Exception e) {
+            log.warn("Failed to fetch contract data", e);
+        }
     }
 
     @Scheduled(fixedRate = 60000)

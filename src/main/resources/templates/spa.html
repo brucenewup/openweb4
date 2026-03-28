@@ -1859,7 +1859,7 @@ renderers['contract'] = function(el) {
       .then(function(data) {
         var wrap = document.getElementById('contractHistoryWrap');
         if (!wrap) return;
-        if (!data || data.length < 2) {
+        if (!data || data.length < 1) {
           wrap.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;font-size:13px;">数据积累中，请稍候...</div>';
           if (contractHistoryChart) { contractHistoryChart.destroy(); contractHistoryChart = null; }
           return;
@@ -1871,7 +1871,7 @@ renderers['contract'] = function(el) {
           return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
         });
         var longData = data.map(function(s){ return s.longAccount ? +s.longAccount.toFixed(2) : +((s.longShortRatio/(1+s.longShortRatio))*100).toFixed(2); });
-        var shortData = data.map(function(s){ return s.shortAccount ? +s.shortAccount.toFixed(2) : +(100 - longData[0]).toFixed(2); });
+        var shortData = data.map(function(s, i){ return s.shortAccount ? +s.shortAccount.toFixed(2) : +(100 - longData[i]).toFixed(2); });
         if (contractHistoryChart) { contractHistoryChart.destroy(); contractHistoryChart = null; }
         wrap.innerHTML = '<canvas id="contractHistoryChart" height="160"></canvas>';
         var ctx = document.getElementById('contractHistoryChart').getContext('2d');
