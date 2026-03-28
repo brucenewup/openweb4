@@ -348,6 +348,13 @@ a.tx-skill-open:hover {
 .addr { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; }
 .badge-btc { background:rgba(255,136,0,0.12); color:var(--neon-orange); border:1px solid rgba(255,136,0,0.2); }
 .badge-eth { background:rgba(139,92,246,0.12); color:var(--neon-purple); border:1px solid rgba(139,92,246,0.2); }
+.badge-sol { background:rgba(153,69,255,0.12); color:#b57bff; border:1px solid rgba(153,69,255,0.2); }
+.badge-bnb { background:rgba(240,185,11,0.12); color:#f0b90b; border:1px solid rgba(240,185,11,0.2); }
+.badge-xrp { background:rgba(0,170,228,0.12); color:#00aae4; border:1px solid rgba(0,170,228,0.2); }
+.badge-doge { background:rgba(194,166,51,0.12); color:#c2a633; border:1px solid rgba(194,166,51,0.2); }
+.coin-tab-btn { background:var(--surface); border:1px solid transparent; border-radius:8px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:all 0.2s; font-family:'JetBrains Mono',monospace; }
+.coin-tab-btn:hover { background:rgba(0,240,255,0.07); border-color:rgba(0,240,255,0.2); color:var(--neon-cyan) !important; }
+.coin-tab-btn.active { background:rgba(0,240,255,0.05); }
 .accent-text { color:var(--neon-cyan); font-weight:700; font-family:'JetBrains Mono',monospace; }
 .chart-title { font-size:14px; font-weight:700; letter-spacing:0.5px; display:flex; align-items:center; gap:8px; }
 .chart-title .dot { width:8px; height:8px; border-radius:50%; animation:glow-pulse 2s infinite; }
@@ -586,13 +593,17 @@ a.tx-skill-open:hover {
     </div>
 
     <nav class="sidebar-nav" id="sidebarNav">
-      <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
-        <span>交易Skills</span>
-      </a>
       <a href="#/dashboard" class="nav-btn" data-page="dashboard">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span>仪表盘</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>实时行情</span>
+      </a>
+      <a href="#/onchain" class="nav-btn" data-page="onchain">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v3M12 11l-5.5 5.5M12 11l5.5 5.5"/></svg>
+        <span>链上监控</span>
+      </a>
+      <a href="#/contract" class="nav-btn" data-page="contract">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/><circle cx="18" cy="7" r="2"/><circle cx="6" cy="11" r="2"/></svg>
+        <span>合约监控</span>
       </a>
       <a href="#/news" class="nav-btn" data-page="news">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
@@ -614,13 +625,9 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>AI 对话</span>
       </a>
-      <a href="#/contract" class="nav-btn" data-page="contract">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/><circle cx="18" cy="7" r="2"/><circle cx="6" cy="11" r="2"/></svg>
-        <span>合约监控</span>
-      </a>
-      <a href="#/onchain" class="nav-btn" data-page="onchain">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-        <span>链上数据</span>
+      <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
+        <span>交易Skills</span>
       </a>
     </nav>
 
@@ -651,11 +658,11 @@ a.tx-skill-open:hover {
 /* ═══════════════════════ i18n ═══════════════════════ */
 var I18N = {
   zh: {
-    appName:'链上监控',
-    nav_dashboard:'仪表盘', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_contract:'合约监控', nav_onchain:'链上数据',
+    appName:'OpenWeb4',
+    nav_dashboard:'实时行情', nav_news:'行情新闻', nav_kol:'大V推文',
+    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_contract:'合约监控', nav_onchain:'链上监控',
     sidebar_toggle:'收起/展开',
-    dash_title:'链上资金监控', dash_sub:'BTC · ETH · USDT 实时行情',
+    dash_title:'实时行情', dash_sub:'多币种实时行情 · 大额交易监控',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
     dash_recent_tx:'近期大额交易', dash_no_tx:'暂无交易记录',
     dash_time:'时间', dash_asset:'资产', dash_amount:'数量', dash_usd:'USD', dash_from:'来自', dash_to:'发往',
@@ -689,8 +696,8 @@ var I18N = {
   },
   en: {
     appName:'OnChain Monitor',
-    nav_dashboard:'Dashboard', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_contract:'Contract', nav_onchain:'On-Chain',
+    nav_dashboard:'Live Market', nav_news:'Market News', nav_kol:'KOL Tweets',
+    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_contract:'Futures', nav_onchain:'On-Chain Monitor',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -760,6 +767,13 @@ function fmtNum(n, decimals) {
   return Number(n).toLocaleString('en-US', { minimumFractionDigits: decimals || 0, maximumFractionDigits: decimals || 0 });
 }
 function fmtPrice(n, d) { return n != null ? '$' + fmtNum(n, d != null ? d : 2) : '--'; }
+function fmtBigNum(n) {
+  if (!n || n <= 0) return '--';
+  if (n >= 1e12) return fmtNum(n/1e12, 2) + 'T';
+  if (n >= 1e9) return fmtNum(n/1e9, 2) + 'B';
+  if (n >= 1e6) return fmtNum(n/1e6, 2) + 'M';
+  return fmtNum(n, 0);
+}
 // 构造带语言参数的 API URL
 function apiUrl(path, forceRefresh) {
   var url = path;
@@ -861,7 +875,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat','contract','onchain'];
+const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','transaction-skills'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -901,64 +915,133 @@ window.addEventListener('hashchange', navigate);
 var renderers = {};
 
 /* ─── Dashboard ─── */
+var dashState = { symbol: 'BTC' };
+var DASH_COINS = [
+  {sym:'BTC', label:'Bitcoin', color:'#f7931a', cls:'badge-btc'},
+  {sym:'ETH', label:'Ethereum', color:'#627eea', cls:'badge-eth'},
+  {sym:'SOL', label:'Solana', color:'#9945ff', cls:'badge-sol'},
+  {sym:'BNB', label:'BNB', color:'#f0b90b', cls:'badge-bnb'},
+  {sym:'XRP', label:'XRP', color:'#00aae4', cls:'badge-xrp'},
+  {sym:'DOGE', label:'Dogecoin', color:'#c2a633', cls:'badge-doge'},
+];
+
 renderers.dashboard = function(el, forceRefresh) {
   // Dashboard has Chart.js canvases; ensure we don't stack charts on repeated refresh.
   destroyCharts();
   var prevSel = document.getElementById('dashAutoRefresh');
   var prevSec = prevSel ? parseInt(prevSel.value) : 30;
+  var sym = dashState.symbol || 'BTC';
 
-  fetchJson(apiUrl('/api/overview', !!forceRefresh)).then(data => {
-    var btc = data.btc || {}, eth = data.eth || {}, usdt = data.usdt || {};
-    var txs = data.transactions || [], flow = data.flowData || [];
+  // 币种选择后的局部刷新
+  function loadDashData(symbol, force) {
+    var isBase = (symbol === 'BTC');
+    var apiEndpoint = isBase ? apiUrl('/api/overview', !!force) : apiUrl('/api/price?symbol=' + symbol, !!force);
+    fetchJson(apiEndpoint).then(data => {
+      var coin = isBase ? (data.btc || {}) : (data.price || {});
+      var txs = data.transactions || [];
+      var flow = data.flowData || [];
+      var coinInfo = DASH_COINS.find(c => c.sym === symbol) || DASH_COINS[0];
+      renderDashContent(coin, txs, flow, coinInfo);
+    }).catch(() => {
+      document.getElementById('dashMainContent') && (document.getElementById('dashMainContent').innerHTML =
+        '<div style="text-align:center;padding:60px;color:var(--muted);">'+t('load_fail')+'</div>');
+    });
+  }
 
-    function changeHtml(coin) {
-      if (coin.change24h == null) return '';
-      var up = coin.change24h >= 0;
+  function renderDashContent(coin, txs, flow, coinInfo) {
+    function changeHtml(c) {
+      if (c.change24h == null) return '';
+      var up = c.change24h >= 0;
       return '<div class="'+(up?'price-up':'price-down')+'" style="margin-top:6px;display:flex;align-items:center;gap:4px;">'
-        +'<span>'+(up?'▲':'▼')+'</span><span>'+(up?'+':'')+fmtNum(coin.change24h,2)+'%</span>'
+        +'<span>'+(up?'▲':'▼')+'</span><span>'+(up?'+':'')+fmtNum(c.change24h,2)+'%</span>'
         +'<span style="font-weight:400;color:var(--muted);margin-left:4px;font-size:11px;letter-spacing:1px;">24H</span></div>';
     }
 
-    var txRows = txs.length ? txs.map(tx =>
-      '<tr style="transition:all .15s;"><td class="table-cell mono" style="color:var(--muted);">'+fmtShortTime(tx.timestamp)+'</td>'
-      +'<td class="table-cell"><span class="badge '+(tx.symbol==='BTC'?'badge-btc':'badge-eth')+'">'+esc(tx.symbol)+'</span></td>'
-      +'<td class="table-cell mono" style="text-align:right;">'+fmtNum(tx.amount,4)+'</td>'
-      +'<td class="table-cell accent-text" style="text-align:right;">'+fmtPrice(tx.usdValue,0)+'</td>'
-      +'<td class="table-cell"><span class="addr">'+esc(tx.fromAddress)+'</span></td>'
-      +'<td class="table-cell"><span class="addr">'+esc(tx.toAddress)+'</span></td></tr>'
-    ).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">'+t('dash_no_tx')+'</td></tr>';
+    var txRows = txs.length ? txs.map(tx => {
+      var bc = DASH_COINS.find(c=>c.sym===tx.symbol)||DASH_COINS[0];
+      return '<tr style="transition:all .15s;"><td class="table-cell mono" style="color:var(--muted);">'+fmtShortTime(tx.timestamp)+'</td>'
+        +'<td class="table-cell"><span class="badge '+bc.cls+'">'+esc(tx.symbol)+'</span></td>'
+        +'<td class="table-cell mono" style="text-align:right;">'+fmtNum(tx.amount,4)+'</td>'
+        +'<td class="table-cell accent-text" style="text-align:right;">'+fmtPrice(tx.usdValue,0)+'</td>'
+        +'<td class="table-cell"><span class="addr">'+esc(tx.fromAddress)+'</span></td>'
+        +'<td class="table-cell"><span class="addr">'+esc(tx.toAddress)+'</span></td></tr>';
+    }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">'+t('dash_no_tx')+'</td></tr>';
 
-    el.innerHTML = '<div class="page-fade-in">'
-      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap;">'
-        +'<div><h1 class="page-title">'+t('dash_title')+'</h1><p class="page-sub">'+t('dash_sub')+'</p></div>'
-        +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
-          +'<span style="font-size:12px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">AUTO</span>'
-          +'<select id="dashAutoRefresh" class="select-cyber"><option value="0">OFF</option><option value="10">10s</option><option value="30" selected>30s</option><option value="60">60s</option><option value="300">5m</option></select>'
-          +'<span id="dashCountdown" style="font-size:12px;color:var(--neon-cyan);min-width:40px;font-family:\'JetBrains Mono\',monospace;"></span>'
-          +'<button type="button" class="btn-primary" id="dashRefreshBtn">'+t('btn_refresh')+'</button>'
+    // 价格卡片 HTML
+    var up = coin.change24h >= 0;
+    var chgHtml = coin.change24h != null
+      ? '<div class="'+(up?'price-up':'price-down')+'" style="margin-top:6px;display:flex;align-items:center;gap:4px;"><span>'+(up?'▲':'▼')+'</span><span>'+(up?'+':'')+fmtNum(coin.change24h,2)+'%</span><span style="font-weight:400;color:var(--muted);margin-left:4px;font-size:11px;">24H</span></div>' : '';
+    var mcapHtml = coin.marketCap > 0
+      ? '<div style="margin-top:4px;font-size:11px;color:var(--muted);">市值 $'+fmtBigNum(coin.marketCap)+'</div>' : '';
+
+    var mainEl = document.getElementById('dashMainContent');
+    if (mainEl) {
+      mainEl.innerHTML =
+        '<div class="price-card" style="border-color:'+coinInfo.color+'33;margin-bottom:24px;">'
+          +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">'
+            +'<span style="font-size:28px;font-weight:900;color:'+coinInfo.color+';text-shadow:0 0 16px '+coinInfo.color+'66;">'+coinInfo.sym+'</span>'
+            +'<div><div style="font-size:13px;color:var(--muted);letter-spacing:1px;">'+coinInfo.label+'</div></div>'
+          +'</div>'
+          +'<div class="price-value">'+fmtPrice(coin.price)+'</div>'
+          +chgHtml+mcapHtml
         +'</div>'
-      +'</div>'
-      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px;">'
-        +'<div class="price-card btc"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><span class="price-sym" style="color:var(--neon-orange);text-shadow:0 0 12px rgba(255,136,0,0.4);">₿</span><span class="price-label">BITCOIN</span></div><div class="price-value">'+fmtPrice(btc.price)+'</div>'+changeHtml(btc)+'</div>'
-        +'<div class="price-card eth"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><span class="price-sym" style="color:var(--neon-purple);text-shadow:0 0 12px rgba(139,92,246,0.4);">Ξ</span><span class="price-label">ETHEREUM</span></div><div class="price-value">'+fmtPrice(eth.price)+'</div>'+changeHtml(eth)+'</div>'
-        +'<div class="price-card usdt"><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><span class="price-sym" style="color:var(--neon-green);text-shadow:0 0 12px rgba(0,255,136,0.4);">₮</span><span class="price-label">TETHER</span></div><div class="price-value">'+(usdt.price>0?fmtPrice(usdt.price,4):'$1.0000')+'</div><div style="margin-top:6px;font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">'+t('dash_stablecoin')+'</div></div>'
-      +'</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px;">'
-        +'<div class="card"><h2 class="chart-title" style="margin-bottom:16px;"><span class="dot dot-btc"></span>'+t('dash_flow_btc')+'</h2><canvas id="spaBtcChart" height="170"></canvas></div>'
-        +'<div class="card"><h2 class="chart-title" style="margin-bottom:16px;"><span class="dot dot-eth"></span>'+t('dash_flow_eth')+'</h2><canvas id="spaEthChart" height="170"></canvas></div>'
-      +'</div>'
-      +'<div class="card"><h2 style="font-size:16px;font-weight:700;margin-bottom:18px;">'+t('dash_recent_tx')+'</h2>'
-        +'<div style="overflow-x:auto;border-radius:10px;"><table style="width:100%;border-collapse:collapse;"><thead><tr>'
-          +'<th class="table-header">'+t('dash_time')+'</th><th class="table-header">'+t('dash_asset')+'</th><th class="table-header" style="text-align:right;">'+t('dash_amount')+'</th><th class="table-header" style="text-align:right;">'+t('dash_usd')+'</th><th class="table-header">'+t('dash_from')+'</th><th class="table-header">'+t('dash_to')+'</th>'
-        +'</tr></thead><tbody>'+txRows+'</tbody></table></div></div>'
-      +'<div class="status-line"><span class="live-dot"></span><span>LIVE</span><span>·</span><span>'+t('dash_last_updated')+': '+new Date().toLocaleTimeString(_lang==='en'?'en-US':'zh-CN')+'</span></div>'
-    +'</div>';
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px;">'
+          +'<div class="card"><h2 class="chart-title" style="margin-bottom:16px;"><span class="dot dot-btc"></span>'+t('dash_flow_btc')+'</h2><canvas id="spaBtcChart" height="170"></canvas></div>'
+          +'<div class="card"><h2 class="chart-title" style="margin-bottom:16px;"><span class="dot dot-eth"></span>'+t('dash_flow_eth')+'</h2><canvas id="spaEthChart" height="170"></canvas></div>'
+        +'</div>'
+        +'<div class="card"><h2 style="font-size:16px;font-weight:700;margin-bottom:18px;">'+t('dash_recent_tx')+'</h2>'
+          +'<div style="overflow-x:auto;border-radius:10px;"><table style="width:100%;border-collapse:collapse;"><thead><tr>'
+            +'<th class="table-header">'+t('dash_time')+'</th><th class="table-header">'+t('dash_asset')+'</th><th class="table-header" style="text-align:right;">'+t('dash_amount')+'</th><th class="table-header" style="text-align:right;">'+t('dash_usd')+'</th><th class="table-header">'+t('dash_from')+'</th><th class="table-header">'+t('dash_to')+'</th>'
+          +'</tr></thead><tbody>'+txRows+'</tbody></table></div></div>'
+        +'<div class="status-line"><span class="live-dot"></span><span>LIVE</span><span>·</span><span>'+t('dash_last_updated')+': '+new Date().toLocaleTimeString(_lang==='en'?'en-US':'zh-CN')+'</span></div>';
+      destroyCharts();
+      buildFlowCharts(flow);
+    }
+  }
 
-    var dashSel = document.getElementById('dashAutoRefresh');
-    if (dashSel) dashSel.value = String(prevSec);
-    buildFlowCharts(flow);
-    setupDashAutoRefresh();
-  }).catch(err => { el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>'; });
+  // 渲染页面框架（含币种选择器）
+  var coinBtns = DASH_COINS.map(c =>
+    '<button type="button" class="coin-tab-btn'+(c.sym===sym?' active':'')
+    +'" data-sym="'+c.sym+'" style="border-color:'+(c.sym===sym?c.color:'transparent')+';color:'+(c.sym===sym?c.color:'var(--muted)')+'">'+c.sym+'</button>'
+  ).join('');
+
+  el.innerHTML = '<div class="page-fade-in">'
+    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;">'
+      +'<div><h1 class="page-title">'+t('dash_title')+'</h1><p class="page-sub">'+t('dash_sub')+'</p></div>'
+      +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+        +'<span style="font-size:12px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">AUTO</span>'
+        +'<select id="dashAutoRefresh" class="select-cyber"><option value="0">OFF</option><option value="10">10s</option><option value="30" selected>30s</option><option value="60">60s</option><option value="300">5m</option></select>'
+        +'<span id="dashCountdown" style="font-size:12px;color:var(--neon-cyan);min-width:40px;font-family:\'JetBrains Mono\',monospace;"></span>'
+        +'<button type="button" class="btn-primary" id="dashRefreshBtn">'+t('btn_refresh')+'</button>'
+      +'</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;" id="coinTabBar">'+coinBtns+'</div>'
+    +'<div id="dashMainContent"><div style="text-align:center;padding:60px;color:var(--muted);">加载中...</div></div>'
+  +'</div>';
+
+  var dashSel = document.getElementById('dashAutoRefresh');
+  if (dashSel) dashSel.value = String(prevSec);
+
+  // 币种切换事件
+  var tabBar = document.getElementById('coinTabBar');
+  if (tabBar) {
+    tabBar.addEventListener('click', function(e) {
+      var btn = e.target.closest('.coin-tab-btn');
+      if (!btn) return;
+      var newSym = btn.dataset.sym;
+      dashState.symbol = newSym;
+      tabBar.querySelectorAll('.coin-tab-btn').forEach(function(b) {
+        var ci = DASH_COINS.find(c=>c.sym===b.dataset.sym)||DASH_COINS[0];
+        b.classList.toggle('active', b.dataset.sym===newSym);
+        b.style.borderColor = b.dataset.sym===newSym ? ci.color : 'transparent';
+        b.style.color = b.dataset.sym===newSym ? ci.color : 'var(--muted)';
+      });
+      loadDashData(newSym, true);
+    });
+  }
+
+  loadDashData(sym, !!forceRefresh);
+  setupDashAutoRefresh();
 };
 
 function buildFlowCharts(flowData) {

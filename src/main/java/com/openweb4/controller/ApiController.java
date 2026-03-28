@@ -59,6 +59,20 @@ public class ApiController {
         );
     }
 
+    @GetMapping("/api/price")
+    public Map<String, Object> price(
+            @RequestParam(name = "symbol", defaultValue = "BTC") String symbol) {
+        CryptoPrice p = cryptoPriceService.getPriceBySymbol(symbol);
+        List<WhaleTransaction> transactions = whaleTrackingService.getRecentWhaleTransactions();
+        List<WhaleTransaction> flowData = whaleTrackingService.getHistoricalFlowData();
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("symbol", symbol.toUpperCase());
+        result.put("price", p);
+        result.put("transactions", transactions);
+        result.put("flowData", flowData);
+        return result;
+    }
+
     @GetMapping("/api/news")
     public Map<String, Object> news(@RequestParam(name = "refresh", required = false, defaultValue = "0") int refresh,
                                     @RequestParam(name = "lang", required = false, defaultValue = "") String lang,

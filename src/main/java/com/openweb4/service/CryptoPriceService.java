@@ -42,6 +42,38 @@ public class CryptoPriceService {
         return getPrice("tether", "USDT");
     }
 
+    public CryptoPrice getSolanaPrice() {
+        return getPrice("solana", "SOL");
+    }
+
+    public CryptoPrice getBnbPrice() {
+        return getPrice("binancecoin", "BNB");
+    }
+
+    public CryptoPrice getXrpPrice() {
+        return getPrice("ripple", "XRP");
+    }
+
+    public CryptoPrice getDogePrice() {
+        return getPrice("dogecoin", "DOGE");
+    }
+
+    /**
+     * 按 symbol 动态查询价格（支持 BTC/ETH/USDT/SOL/BNB/XRP/DOGE）
+     */
+    public CryptoPrice getPriceBySymbol(String symbol) {
+        switch (symbol.toUpperCase()) {
+            case "BTC": return getBitcoinPrice();
+            case "ETH": return getEthereumPrice();
+            case "USDT": return getTetherPrice();
+            case "SOL": return getSolanaPrice();
+            case "BNB": return getBnbPrice();
+            case "XRP": return getXrpPrice();
+            case "DOGE": return getDogePrice();
+            default: return getBitcoinPrice();
+        }
+    }
+
     private CryptoPrice getPrice(String coinId, String symbol) {
         String url = "https://api.coingecko.com/api/v3/simple/price?ids=" + coinId
                 + "&vs_currencies=usd&include_24hr_change=true&include_market_cap=true";
