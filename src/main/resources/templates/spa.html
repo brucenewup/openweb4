@@ -618,6 +618,10 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/><circle cx="18" cy="7" r="2"/><circle cx="6" cy="11" r="2"/></svg>
         <span>合约监控</span>
       </a>
+      <a href="#/onchain" class="nav-btn" data-page="onchain">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        <span>链上数据</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -649,7 +653,7 @@ var I18N = {
   zh: {
     appName:'链上监控',
     nav_dashboard:'仪表盘', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话',
+    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_contract:'合约监控', nav_onchain:'链上数据',
     sidebar_toggle:'收起/展开',
     dash_title:'链上资金监控', dash_sub:'BTC · ETH · USDT 实时行情',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -686,7 +690,7 @@ var I18N = {
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Dashboard', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat',
+    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_contract:'Contract', nav_onchain:'On-Chain',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -813,7 +817,7 @@ if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(tr
 
 /* ═══════════════════════ Language Switch ═══════════════════════ */
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
-  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'contract':'nav_contract'};
+  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'contract':'nav_contract', 'onchain':'nav_onchain'};
 
 /** Sync sidebar nav text, lang toggle UI, html[lang] — brand "OpenWeb4" stays fixed (not localized) */
 function syncSidebarI18n() {
@@ -857,7 +861,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat','contract'];
+const PAGES = ['transaction-skills','dashboard','news','kol-tweets','market-forecast','market-indices','ai-chat','contract','onchain'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1930,6 +1934,166 @@ renderers['contract'] = function(el) {
   startContractTimer(prevSec);
 
   el._contractCleanup = function(){ clearAutoRefresh(); if(contractHistoryChart){ contractHistoryChart.destroy(); contractHistoryChart=null; } };
+};
+
+/* ─── On-Chain Data Visualization ─── */
+var onchainState = { symbol: 'BTC' };
+renderers['onchain'] = function(el) {
+  var prevSym = onchainState.symbol || 'BTC';
+  el.innerHTML =
+    '<div style="padding:20px 0 8px;">'
+    +'<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">'
+    +'<h2 style="margin:0;font-size:1.15rem;color:var(--neon-cyan);">🔗 链上数据可视化</h2>'
+    +'<div style="display:flex;gap:6px;">'
+    +'<button id="ocBtc" class="tab-btn">BTC</button>'
+    +'<button id="ocEth" class="tab-btn">ETH</button>'
+    +'<button id="ocSol" class="tab-btn">SOL</button>'
+    +'</div>'
+    +'<button id="ocRefresh" class="btn-cyber" style="margin-left:auto;font-size:12px;padding:4px 12px;">↻ 刷新</button>'
+    +'</div>'
+    +'<div id="ocKpi" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;"></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">'
+    +'<div class="card-cyber" style="padding:16px;"><div style="font-size:12px;color:var(--muted);margin-bottom:8px;">24h 交易所资金流向（百万 USD）</div><div style="position:relative;height:160px;"><canvas id="ocFlowChart"></canvas></div></div>'
+    +'<div class="card-cyber" style="padding:16px;"><div style="font-size:12px;color:var(--muted);margin-bottom:8px;">流入 vs 流出汇总</div><div id="ocFlowSummary" style="padding-top:8px;"></div></div>'
+    +'</div>'
+    +'<div class="card-cyber" style="padding:16px;"><div style="font-size:12px;color:var(--muted);margin-bottom:10px;">近期大额交易（>$1M）</div><div id="ocTxList"></div></div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-top:10px;" id="ocSource"></div>'
+    +'</div>';
+
+  var ocFlowChart = null;
+
+  function fmtUsd(n) {
+    if (!n) return '$0';
+    var v = typeof n === 'object' ? parseFloat(n) : n;
+    if (v >= 1e9) return '$' + (v/1e9).toFixed(2) + 'B';
+    if (v >= 1e6) return '$' + (v/1e6).toFixed(1) + 'M';
+    return '$' + v.toLocaleString();
+  }
+  function fmtNum(n) {
+    var v = typeof n === 'object' ? parseFloat(n) : n;
+    if (v >= 1e6) return (v/1e6).toFixed(2) + 'M';
+    if (v >= 1e3) return (v/1e3).toFixed(1) + 'K';
+    return v.toLocaleString();
+  }
+  function colorNet(net) {
+    var v = typeof net === 'object' ? parseFloat(net) : net;
+    return v >= 0 ? 'var(--neon-green,#00ff88)' : '#ff4466';
+  }
+
+  function setOcActive(sym) {
+    ['ocBtc','ocEth','ocSol'].forEach(function(id){
+      var b = document.getElementById(id);
+      if(b) b.classList.remove('active');
+    });
+    var map = {BTC:'ocBtc',ETH:'ocEth',SOL:'ocSol'};
+    var btn = document.getElementById(map[sym]);
+    if(btn) btn.classList.add('active');
+  }
+
+  function loadOnchain(sym) {
+    onchainState.symbol = sym;
+    setOcActive(sym);
+    var kpi = document.getElementById('ocKpi');
+    var txList = document.getElementById('ocTxList');
+    var src = document.getElementById('ocSource');
+    if(kpi) kpi.innerHTML = '<div style="color:var(--muted);font-size:13px;">加载中…</div>';
+    fetch('/api/onchain?symbol=' + sym + '&_=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        // KPI cards
+        var netV = typeof d.netFlowUsd24h === 'object' ? parseFloat(d.netFlowUsd24h) : d.netFlowUsd24h;
+        var netColor = netV >= 0 ? 'var(--neon-green,#00ff88)' : '#ff4466';
+        var netLabel = netV >= 0 ? '▲ 净流入' : '▼ 净流出';
+        var hashrateLabel = sym === 'SOL' ? 'TPS 吞吐' : (sym === 'ETH' ? '质押量（模拟）' : '算力 EH/s');
+        var hashrateVal = sym === 'SOL' ? '~4,000' : (parseFloat(d.networkHashrate)||0).toFixed(1);
+        if(kpi) kpi.innerHTML =
+          '<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">当前价格</div><div style="font-size:1.2rem;font-weight:700;color:var(--neon-cyan);">'+fmtUsd(parseFloat(d.price))+'</div></div>'
+          +'<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">活跃地址 (24h)</div><div style="font-size:1.1rem;font-weight:700;">'+fmtNum(d.activeAddresses)+'</div></div>'
+          +'<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">大额交易数 (24h)</div><div style="font-size:1.1rem;font-weight:700;">'+parseFloat(d.largeTransactionCount)+'</div></div>'
+          +'<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">均均手续费</div><div style="font-size:1.1rem;font-weight:700;">$'+parseFloat(d.avgTransactionFee).toFixed(3)+'</div></div>'
+          +'<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">'+hashrateLabel+'</div><div style="font-size:1.1rem;font-weight:700;">'+hashrateVal+'</div></div>'
+          +'<div class="card-cyber" style="padding:12px;"><div style="font-size:11px;color:var(--muted);">净流向 (24h)</div><div style="font-size:1.1rem;font-weight:700;color:'+netColor+';">'+netLabel+' '+fmtUsd(Math.abs(netV))+'</div></div>';
+
+        // Flow chart
+        var hours = (d.hourlyFlow||[]).map(function(p){ return p.hour+'h'; });
+        var inflows = (d.hourlyFlow||[]).map(function(p){ return parseFloat(p.inflow); });
+        var outflows = (d.hourlyFlow||[]).map(function(p){ return parseFloat(p.outflow); });
+        var canvasEl = document.getElementById('ocFlowChart');
+        if(canvasEl) {
+          if(ocFlowChart){ ocFlowChart.destroy(); ocFlowChart=null; }
+          // remove from activeCharts if already tracked
+          var idx = activeCharts.indexOf(ocFlowChart);
+          if(idx > -1) activeCharts.splice(idx, 1);
+          ocFlowChart = new Chart(canvasEl.getContext('2d'), {
+            type:'bar',
+            data:{
+              labels:hours,
+              datasets:[
+                {label:'流入',data:inflows,backgroundColor:'rgba(0,255,136,0.5)',borderColor:'#00ff88',borderWidth:1},
+                {label:'流出',data:outflows,backgroundColor:'rgba(255,68,102,0.4)',borderColor:'#ff4466',borderWidth:1}
+              ]
+            },
+            options:{
+              responsive:true,maintainAspectRatio:false,
+              plugins:{legend:{labels:{color:'#aaa',font:{size:11}}},tooltip:{mode:'index'}},
+              scales:{
+                x:{ticks:{color:'#888',font:{size:9},maxRotation:0},grid:{color:'rgba(255,255,255,0.05)'}},
+                y:{ticks:{color:'#888',font:{size:10}},grid:{color:'rgba(255,255,255,0.05)'}}
+              }
+            }
+          });
+          activeCharts.push(ocFlowChart);
+        }
+
+        // Flow summary
+        var sumEl = document.getElementById('ocFlowSummary');
+        if(sumEl) sumEl.innerHTML =
+          '<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--muted);">交易所流入 (24h)</div><div style="font-size:1.1rem;color:#00ff88;font-weight:700;">'+fmtUsd(parseFloat(d.inflowUsd24h))+'</div></div>'
+          +'<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--muted);">交易所流出 (24h)</div><div style="font-size:1.1rem;color:#ff4466;font-weight:700;">'+fmtUsd(parseFloat(d.outflowUsd24h))+'</div></div>'
+          +'<div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;"><div style="font-size:11px;color:var(--muted);">净流向</div><div style="font-size:1.2rem;font-weight:700;color:'+netColor+';">'+netLabel+' '+fmtUsd(Math.abs(netV))+'</div>'
+          +'<div style="font-size:11px;color:var(--muted);margin-top:4px;">'+(netV>=0?'资金净流入交易所，短期抛压信号':'资金净流出交易所，持币意愿强')+'</div></div>';
+
+        // Large tx list
+        var rows = (d.recentLargeTxs||[]).map(function(tx){
+          return '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">'
+            +'<td style="padding:6px 8px;font-size:12px;color:var(--muted);">'+tx.timeAgo+'</td>'
+            +'<td style="padding:6px 8px;font-size:12px;font-weight:700;color:var(--neon-cyan);">'+tx.symbol+'</td>'
+            +'<td style="padding:6px 8px;font-size:12px;">'+parseFloat(tx.amount).toLocaleString()+'</td>'
+            +'<td style="padding:6px 8px;font-size:12px;color:#ffd700;">'+fmtUsd(parseFloat(tx.usdValue))+'</td>'
+            +'<td style="padding:6px 8px;font-size:11px;color:var(--muted);">'+tx.fromTag+'</td>'
+            +'<td style="padding:6px 8px;font-size:11px;color:var(--muted);">'+tx.toTag+'</td>'
+            +'</tr>';
+        }).join('');
+        if(txList) txList.innerHTML = rows
+          ? '<table style="width:100%;border-collapse:collapse;"><thead><tr style="font-size:11px;color:var(--muted);">'
+            +'<th style="padding:4px 8px;text-align:left;">时间</th><th style="padding:4px 8px;text-align:left;">币种</th>'
+            +'<th style="padding:4px 8px;text-align:left;">数量</th><th style="padding:4px 8px;text-align:left;">USD</th>'
+            +'<th style="padding:4px 8px;text-align:left;">来源</th><th style="padding:4px 8px;text-align:left;">目标</th>'
+            +'</tr></thead><tbody>'+rows+'</tbody></table>'
+          : '<div style="color:var(--muted);text-align:center;padding:16px;">暂无大额交易数据</div>';
+
+        if(src) src.textContent = '数据源：' + (d.dataSource||'') + ' · 更新：' + new Date(d.updatedAt).toLocaleTimeString();
+      })
+      .catch(function(e){
+        if(kpi) kpi.innerHTML = '<div style="color:#ff4466;">加载失败：' + e.message + '</div>';
+      });
+  }
+
+  document.getElementById('ocBtc').addEventListener('click', function(){ onchainState.symbol='BTC'; loadOnchain('BTC'); });
+  document.getElementById('ocEth').addEventListener('click', function(){ onchainState.symbol='ETH'; loadOnchain('ETH'); });
+  document.getElementById('ocSol').addEventListener('click', function(){ onchainState.symbol='SOL'; loadOnchain('SOL'); });
+  document.getElementById('ocRefresh').addEventListener('click', function(){ loadOnchain(onchainState.symbol); });
+
+  el._onchainCleanup = function(){
+    if(ocFlowChart){
+      var idx = activeCharts.indexOf(ocFlowChart);
+      if(idx > -1) activeCharts.splice(idx, 1);
+      ocFlowChart.destroy();
+      ocFlowChart = null;
+    }
+  };
+
+  loadOnchain(prevSym);
 };
 
 /* ═══════════════════════ Init ═══════════════════════ */
