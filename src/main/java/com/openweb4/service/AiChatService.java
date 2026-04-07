@@ -72,9 +72,11 @@ public class AiChatService {
                 JsonObject obj = JsonParser.parseString(respStr).getAsJsonObject();
                 JsonArray choices = obj.getAsJsonArray("choices");
                 if (choices != null && !choices.isEmpty()) {
-                    JsonObject message = choices.get(0).getAsJsonObject().getAsJsonObject("message");
-                    if (message != null && message.has("content")) {
-                        String fullContent = message.get("content").getAsString();
+                    JsonObject choice = choices.get(0).getAsJsonObject();
+                    if (choice != null && choice.has("message")) {
+                        JsonObject message = choice.getAsJsonObject("message");
+                        if (message != null && message.has("content") && !message.get("content").isJsonNull()) {
+                            String fullContent = message.get("content").getAsString();
                         // 按标点分块，模拟流式输出
                         String[] sentences = fullContent.split("(?<=[。！？.!?\n])");
                         for (String sentence : sentences) {
@@ -84,9 +86,10 @@ public class AiChatService {
                             }
                         }
                         // 若无标点分割，直接整段发送
-                        if (!gotContent && !fullContent.isEmpty()) {
-                            onChunk.accept(fullContent);
-                            gotContent = true;
+                            if (!gotContent && !fullContent.isEmpty()) {
+                                onChunk.accept(fullContent);
+                                gotContent = true;
+                            }
                         }
                     }
                 }

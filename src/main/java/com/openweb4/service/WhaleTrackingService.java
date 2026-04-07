@@ -29,6 +29,7 @@ public class WhaleTrackingService {
 
     private static final Logger log = LoggerFactory.getLogger(WhaleTrackingService.class);
     private static final String WHALE_ALERT_API_URL = "https://api.whale-alert.io/v1/transactions";
+    private static final long WHALE_ALERT_TIME_WINDOW_SECONDS = 3600;
 
     private final AppProperties appProperties;
     private final OkHttpClient httpClient;
@@ -55,7 +56,7 @@ public class WhaleTrackingService {
 
         try {
             long currentTime = System.currentTimeMillis() / 1000;
-            long startTime = currentTime - 3600; // Last 1 hour
+            long startTime = currentTime - WHALE_ALERT_TIME_WINDOW_SECONDS;
 
             String url = String.format("%s?api_key=%s&start=%d&min_value=%d&limit=%d",
                     WHALE_ALERT_API_URL,
@@ -73,12 +74,20 @@ public class WhaleTrackingService {
             
             try (Response response = httpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
-                    String errBody = response.body() != null ? response.body().string() : "";
+                    String errBody = "";
+                    if (response.body() != null) {
+                        errBody = response.body().string();
+                    }
                     log.warn("Whale Alert API error: {} | errBody={}", response.code(), errBody);
                     return cached != null ? cached : new ArrayList<>();
                 }
 
-                String responseBody = response.body() != null ? response.body().string() : "";
+                if (response.body() == null) {
+                    log.warn("Whale Alert API returned null body");
+                    return cached != null ? cached : new ArrayList<>();
+                }
+
+                String responseBody = response.body().string();
                 List<WhaleTransaction> transactions = parseWhaleAlertResponse(responseBody);
                 
                 if (!transactions.isEmpty()) {

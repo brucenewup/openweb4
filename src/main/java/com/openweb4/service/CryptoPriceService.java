@@ -1,5 +1,7 @@
 package com.openweb4.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.openweb4.model.CryptoPrice;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -24,10 +24,14 @@ public class CryptoPriceService {
     private static final BigDecimal ZERO = BigDecimal.ZERO;
 
     private final OkHttpClient client;
-    private final Map<String, CryptoPrice> cache = new ConcurrentHashMap<>();
+    private final Cache<String, CryptoPrice> cache;
 
     public CryptoPriceService(OkHttpClient client) {
         this.client = client;
+        this.cache = Caffeine.newBuilder()
+                .expireAfterWrite(5, TimeUnit.MINUTES)
+                .maximumSize(20)
+                .build();
     }
 
     public CryptoPrice getBitcoinPrice() {
@@ -114,7 +118,7 @@ public class CryptoPriceService {
             log.warn("Failed to fetch {} price from CoinGecko: {}", symbol, e.getMessage());
         }
 
-        CryptoPrice cached = cache.get(symbol);
+        CryptoPrice cached = cache.getIfPresent(symbol);
         if (cached != null) {
             return cached;
         }

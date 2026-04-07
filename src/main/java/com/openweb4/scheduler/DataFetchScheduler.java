@@ -40,64 +40,81 @@ public class DataFetchScheduler {
     @Scheduled(fixedRate = 60000)
     public void fetchContractData() {
         log.debug("Fetching contract data (BTC/ETH)");
-        try {
+        executeWithRetry(() -> {
             contractDataService.getContractData("BTCUSDT");
             contractDataService.getContractData("ETHUSDT");
-        } catch (Exception e) {
-            log.warn("Failed to fetch contract data", e);
-        }
+        }, "contract data");
     }
 
     @Scheduled(fixedRate = 60000)
     public void fetchCryptoPrices() {
         log.debug("Fetching crypto prices");
-        try {
+        executeWithRetry(() -> {
             cryptoPriceService.getBitcoinPrice();
             cryptoPriceService.getEthereumPrice();
             cryptoPriceService.getTetherPrice();
-        } catch (Exception e) {
-            log.warn("Failed to fetch crypto prices", e);
-        }
+        }, "crypto prices");
     }
 
     @Scheduled(fixedRate = 300000)
     public void fetchWhaleTransactions() {
         log.debug("Fetching whale transactions");
-        try {
+        executeWithRetry(() -> {
             whaleTrackingService.getRecentWhaleTransactions();
-        } catch (Exception e) {
-            log.warn("Failed to fetch whale transactions", e);
-        }
+        }, "whale transactions");
     }
 
     @Scheduled(fixedRate = 1800000)
     public void fetchNews() {
         log.debug("Fetching crypto news");
-        try {
+        executeWithRetry(() -> {
             newsService.fetchCryptoNews();
-        } catch (Exception e) {
-            log.warn("Failed to fetch news", e);
-        }
+        }, "crypto news");
     }
 
 
     @Scheduled(fixedRate = 1800000)
     public void fetchLatestTweets() {
         log.debug("Fetching latest KOL tweets");
-        try {
+        executeWithRetry(() -> {
             tweetService.fetchLatestTweets();
-        } catch (Exception e) {
-            log.warn("Failed to fetch latest tweets", e);
-        }
+        }, "latest tweets");
     }
 
     @Scheduled(cron = "0 0 8 * * ?")
     public void generateDailyMarketBriefing() {
         log.info("Generating daily market briefing at 8:00 AM");
-        try {
+        executeWithRetry(() -> {
             marketBriefingService.generateBriefing();
-        } catch (Exception e) {
-            log.warn("Failed to generate daily market briefing", e);
+        }, "daily market briefing");
+    }
+
+    /**
+     * 带重试机制的任务执行器
+     * @param task 要执行的任务
+     * @param taskName 任务名称（用于日志）
+     */
+    private void executeWithRetry(Runnable task, String taskName) {
+        int maxRetries = 3;
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                task.run();
+                return; // 成功则退出
+            } catch (Exception e) {
+                if (attempt < maxRetries) {
+                    log.warn("Failed to fetch {} (attempt {}/{}): {}", taskName, attempt, maxRetries, e.getMessage());
+                    try {
+                        Thread.sleep(1000 * attempt); // 指数退避
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        log.error("Retry interrupted for {}", taskName);
+                        return;
+                    }
+                } else {
+                    log.error("All {} retries exhausted for {}", maxRetries, taskName, e);
+                    // TODO: 发送告警（邮件/钉钉/Slack）
+                }
+            }
         }
     }
 }
