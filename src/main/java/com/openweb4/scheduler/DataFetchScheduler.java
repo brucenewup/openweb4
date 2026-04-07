@@ -2,6 +2,7 @@ package com.openweb4.scheduler;
 
 import com.openweb4.service.ContractDataService;
 import com.openweb4.service.CryptoPriceService;
+import com.openweb4.service.MarketBriefingService;
 import com.openweb4.service.NewsService;
 import com.openweb4.service.WhaleTrackingService;
 import com.openweb4.service.TweetService;
@@ -20,17 +21,20 @@ public class DataFetchScheduler {
     private final NewsService newsService;
     private final TweetService tweetService;
     private final ContractDataService contractDataService;
+    private final MarketBriefingService marketBriefingService;
 
     public DataFetchScheduler(CryptoPriceService cryptoPriceService,
                               WhaleTrackingService whaleTrackingService,
                               NewsService newsService,
                               TweetService tweetService,
-                              ContractDataService contractDataService) {
+                              ContractDataService contractDataService,
+                              MarketBriefingService marketBriefingService) {
         this.cryptoPriceService = cryptoPriceService;
         this.whaleTrackingService = whaleTrackingService;
         this.newsService = newsService;
         this.tweetService = tweetService;
         this.contractDataService = contractDataService;
+        this.marketBriefingService = marketBriefingService;
     }
 
     @Scheduled(fixedRate = 60000)
@@ -84,6 +88,16 @@ public class DataFetchScheduler {
             tweetService.fetchLatestTweets();
         } catch (Exception e) {
             log.warn("Failed to fetch latest tweets", e);
+        }
+    }
+
+    @Scheduled(cron = "0 0 8 * * ?")
+    public void generateDailyMarketBriefing() {
+        log.info("Generating daily market briefing at 8:00 AM");
+        try {
+            marketBriefingService.generateBriefing();
+        } catch (Exception e) {
+            log.warn("Failed to generate daily market briefing", e);
         }
     }
 }

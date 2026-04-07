@@ -625,6 +625,10 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>AI 对话</span>
       </a>
+      <a href="#/market-briefing" class="nav-btn" data-page="market-briefing">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>市场简报</span>
+      </a>
       <a href="#/transaction-skills" class="nav-btn" data-page="transaction-skills">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
         <span>交易Skills</span>
@@ -660,7 +664,7 @@ var I18N = {
   zh: {
     appName:'OpenWeb4',
     nav_dashboard:'实时行情', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_contract:'合约监控', nav_onchain:'链上监控',
+    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控',
     sidebar_toggle:'收起/展开',
     dash_title:'实时行情', dash_sub:'多币种实时行情 · 大额交易监控',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -697,7 +701,7 @@ var I18N = {
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Live Market', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_contract:'Futures', nav_onchain:'On-Chain Monitor',
+    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -831,7 +835,7 @@ if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(tr
 
 /* ═══════════════════════ Language Switch ═══════════════════════ */
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
-  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'contract':'nav_contract', 'onchain':'nav_onchain'};
+  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'market-briefing':'nav_briefing', 'contract':'nav_contract', 'onchain':'nav_onchain'};
 
 /** Sync sidebar nav text, lang toggle UI, html[lang] — brand "OpenWeb4" stays fixed (not localized) */
 function syncSidebarI18n() {
@@ -875,7 +879,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','transaction-skills'];
+const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1614,6 +1618,61 @@ renderers['ai-chat'] = function(el) {
   input.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.dispatchEvent(new Event('submit'));} });
   input.addEventListener('input',function(){ input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,120)+'px'; });
   input.focus();
+};
+
+/* ─── Market Briefing ─── */
+renderers['market-briefing'] = function(el) {
+  el.innerHTML =
+    '<div class="card" style="max-width:56rem;margin:0 auto;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">' +
+        '<div><h1 style="font-size:24px;font-weight:800;margin-bottom:4px;">' + (_lang === 'en' ? 'Market Briefing' : '市场简报') + '</h1>' +
+        '<p style="font-size:13px;color:var(--muted);">' + (_lang === 'en' ? 'AI-generated daily market summary' : 'AI 生成的每日市场摘要') + '</p></div>' +
+        '<button id="briefingRefreshBtn" class="btn-refresh" style="padding:8px 16px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;">' +
+          '↻ ' + (_lang === 'en' ? 'Refresh' : '刷新') +
+        '</button>' +
+      '</div>' +
+      '<div id="briefingContent" style="padding:24px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);min-height:200px;">' +
+        '<div style="text-align:center;padding:60px 0;color:var(--muted);">' +
+          '<div class="skeleton" style="width:80%;height:20px;margin:0 auto 12px;"></div>' +
+          '<div class="skeleton" style="width:60%;height:20px;margin:0 auto 12px;"></div>' +
+          '<div class="skeleton" style="width:70%;height:20px;margin:0 auto;"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="briefingMeta" style="margin-top:12px;font-size:12px;color:var(--muted);text-align:right;"></div>' +
+    '</div>';
+
+  function loadBriefing() {
+    var contentEl = document.getElementById('briefingContent');
+    var metaEl = document.getElementById('briefingMeta');
+    var refreshBtn = document.getElementById('briefingRefreshBtn');
+    
+    if (refreshBtn) refreshBtn.disabled = true;
+    
+    fetchJson('/api/market-briefing')
+      .then(function(data) {
+        if (data && data.content) {
+          contentEl.innerHTML = '<div style="line-height:1.8;white-space:pre-wrap;font-size:15px;">' + esc(data.content) + '</div>';
+          var cacheLabel = data.cached ? (_lang === 'en' ? ' (cached)' : ' (缓存)') : '';
+          metaEl.textContent = (_lang === 'en' ? 'Generated at: ' : '生成时间：') + data.generatedAt + cacheLabel;
+        } else {
+          contentEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">' + 
+            (_lang === 'en' ? 'No briefing available' : '暂无简报') + '</div>';
+        }
+        if (refreshBtn) refreshBtn.disabled = false;
+      })
+      .catch(function() {
+        contentEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">' + 
+          (_lang === 'en' ? 'Failed to load briefing' : '加载简报失败') + '</div>';
+        if (refreshBtn) refreshBtn.disabled = false;
+      });
+  }
+
+  loadBriefing();
+  
+  var refreshBtn = document.getElementById('briefingRefreshBtn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', loadBriefing);
+  }
 };
 
 /* ═══════════════════════ Dynamic Background ═══════════════════════ */

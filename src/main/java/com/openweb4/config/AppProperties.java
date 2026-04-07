@@ -9,6 +9,7 @@ public class AppProperties {
     private final Security security = new Security();
     private final Tweets tweets = new Tweets();
     private final RateLimit rateLimit = new RateLimit();
+    private final WhaleAlert whaleAlert = new WhaleAlert();
 
     public Ai getAi() {
         return ai;
@@ -24,6 +25,10 @@ public class AppProperties {
 
     public RateLimit getRateLimit() {
         return rateLimit;
+    }
+
+    public WhaleAlert getWhaleAlert() {
+        return whaleAlert;
     }
 
     public static class Ai {
@@ -119,5 +124,18 @@ public class AppProperties {
 
         public String[] getHandles() { return handles; }
         public void setHandles(String[] handles) { this.handles = handles; }
+    }
+
+    public static class WhaleAlert {
+        private String apiKey = "";
+        private int minValue = 500000;
+        private int limit = 10;
+
+        public String getApiKey() { return apiKey; }
+        public void setApiKey(String apiKey) { this.apiKey = apiKey; }
+        public int getMinValue() { return minValue; }
+        public void setMinValue(int minValue) { this.minValue = minValue; }
+        public int getLimit() { return limit; }
+        public void setLimit(int limit) { this.limit = limit; }
     }
 }

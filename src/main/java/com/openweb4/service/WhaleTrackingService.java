@@ -1,66 +1,149 @@
 package com.openweb4.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.openweb4.config.AppProperties;
 import com.openweb4.model.WhaleTransaction;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class WhaleTrackingService {
 
+    private static final Logger log = LoggerFactory.getLogger(WhaleTrackingService.class);
+    private static final String WHALE_ALERT_API_URL = "https://api.whale-alert.io/v1/transactions";
+
+    private final AppProperties appProperties;
+    private final OkHttpClient httpClient;
+    private final Cache<String, List<WhaleTransaction>> cache;
+
+    public WhaleTrackingService(AppProperties appProperties, OkHttpClient httpClient) {
+        this.appProperties = appProperties;
+        this.httpClient = httpClient;
+        this.cache = Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.HOURS)
+                .maximumSize(10)
+                .build();
+    }
+
     public List<WhaleTransaction> getRecentWhaleTransactions() {
+        String cacheKey = "recent_whale_transactions";
+        List<WhaleTransaction> cached = cache.getIfPresent(cacheKey);
+        
+        AppProperties.WhaleAlert cfg = appProperties.getWhaleAlert();
+        if (cfg.getApiKey() == null || cfg.getApiKey().trim().isEmpty()) {
+            log.warn("Whale Alert API key not configured, returning cached data or empty list");
+            return cached != null ? cached : new ArrayList<>();
+        }
+
+        try {
+            long currentTime = System.currentTimeMillis() / 1000;
+            long startTime = currentTime - 3600; // Last 1 hour
+
+            String url = String.format("%s?api_key=%s&start=%d&min_value=%d&limit=%d",
+                    WHALE_ALERT_API_URL,
+                    cfg.getApiKey(),
+                    startTime,
+                    cfg.getMinValue(),
+                    cfg.getLimit());
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("User-Agent", "OpenWeb4/1.0")
+                    .build();
+
+            log.debug("Fetching whale transactions from Whale Alert API");
+            
+            try (Response response = httpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    String errBody = response.body() != null ? response.body().string() : "";
+                    log.warn("Whale Alert API error: {} | errBody={}", response.code(), errBody);
+                    return cached != null ? cached : new ArrayList<>();
+                }
+
+                String responseBody = response.body() != null ? response.body().string() : "";
+                List<WhaleTransaction> transactions = parseWhaleAlertResponse(responseBody);
+                
+                if (!transactions.isEmpty()) {
+                    cache.put(cacheKey, transactions);
+                    log.info("Fetched {} whale transactions from API", transactions.size());
+                }
+                
+                return transactions;
+            }
+        } catch (Exception e) {
+            log.warn("Failed to fetch whale transactions: {}", e.getMessage());
+            return cached != null ? cached : new ArrayList<>();
+        }
+    }
+
+    private List<WhaleTransaction> parseWhaleAlertResponse(String responseBody) {
         List<WhaleTransaction> transactions = new ArrayList<>();
-        transactions.addAll(getBtcWhaleTransactions());
-        transactions.addAll(getEthWhaleTransactions());
-        transactions.sort(Comparator.comparing(WhaleTransaction::getTimestamp).reversed());
+        
+        try {
+            JsonObject root = JsonParser.parseString(responseBody).getAsJsonObject();
+            
+            if (!root.has("transactions")) {
+                return transactions;
+            }
+
+            JsonArray txArray = root.getAsJsonArray("transactions");
+            
+            for (JsonElement element : txArray) {
+                JsonObject tx = element.getAsJsonObject();
+                
+                String hash = tx.has("hash") ? tx.get("hash").getAsString() : "";
+                String symbol = tx.has("symbol") ? tx.get("symbol").getAsString().toUpperCase() : "UNKNOWN";
+                
+                BigDecimal amount = tx.has("amount") ? 
+                        new BigDecimal(tx.get("amount").getAsString()) : BigDecimal.ZERO;
+                
+                BigDecimal usdValue = tx.has("amount_usd") ? 
+                        new BigDecimal(tx.get("amount_usd").getAsString()) : BigDecimal.ZERO;
+                
+                JsonObject from = tx.has("from") ? tx.getAsJsonObject("from") : new JsonObject();
+                String fromAddress = from.has("address") ? from.get("address").getAsString() : "unknown";
+                
+                JsonObject to = tx.has("to") ? tx.getAsJsonObject("to") : new JsonObject();
+                String toAddress = to.has("address") ? to.get("address").getAsString() : "unknown";
+                
+                long timestamp = tx.has("timestamp") ? tx.get("timestamp").getAsLong() : System.currentTimeMillis() / 1000;
+                LocalDateTime dateTime = LocalDateTime.ofInstant(
+                        Instant.ofEpochSecond(timestamp), 
+                        ZoneId.systemDefault());
+                
+                transactions.add(new WhaleTransaction(
+                        hash, symbol, amount, usdValue, fromAddress, toAddress, dateTime));
+            }
+            
+            transactions.sort(Comparator.comparing(WhaleTransaction::getTimestamp).reversed());
+            
+        } catch (Exception e) {
+            log.warn("Failed to parse Whale Alert response: {}", e.getMessage());
+        }
+        
         return transactions;
     }
 
-    private List<WhaleTransaction> getBtcWhaleTransactions() {
-        List<WhaleTransaction> list = new ArrayList<>();
-        list.add(new WhaleTransaction(
-                "btc_tx_001", "BTC", new BigDecimal("150"), new BigDecimal("10500000"),
-                "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-                "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
-                LocalDateTime.now().minusMinutes(5)));
-        list.add(new WhaleTransaction(
-                "btc_tx_002", "BTC", new BigDecimal("320"), new BigDecimal("22400000"),
-                "bc1q9dpy5pmc6tmh7w3t7h5lxszv7k8lk5n5x7r3hj",
-                "bc1qg9m0qs7mqgt464n6l2m0h5s4g7j5qx3vy3q3hq",
-                LocalDateTime.now().minusMinutes(12)));
-        list.add(new WhaleTransaction(
-                "btc_tx_003", "BTC", new BigDecimal("85"), new BigDecimal("5950000"),
-                "bc1qvzer0r9c8k3lkk3m5y5l0y9s7g8n3t0x7k5m6",
-                "bc1qykj5s0h5s5h5j5j5j5j5j5j5j5j5j5j5j5j5",
-                LocalDateTime.now().minusMinutes(25)));
-        return list;
-    }
-
-    private List<WhaleTransaction> getEthWhaleTransactions() {
-        List<WhaleTransaction> list = new ArrayList<>();
-        list.add(new WhaleTransaction(
-                "eth_tx_001", "ETH", new BigDecimal("5000"), new BigDecimal("17500000"),
-                "0x28c6c06298d514db089934071355e5743bf21d60",
-                "0x21a31ee1afc51d94c2efccaa2092ad1028285549",
-                LocalDateTime.now().minusMinutes(8)));
-        list.add(new WhaleTransaction(
-                "eth_tx_002", "ETH", new BigDecimal("12000"), new BigDecimal("42000000"),
-                "0x56d925f56f4f118a3d8c9a0c1c6e5f7a8e9c0b1d",
-                "0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503",
-                LocalDateTime.now().minusMinutes(18)));
-        list.add(new WhaleTransaction(
-                "eth_tx_003", "ETH", new BigDecimal("2800"), new BigDecimal("9800000"),
-                "0x3f5ce5fbfe3e9af3971dd833d26ba9b5c936f0be",
-                "0xdfd5293d8e347dfe59e90efd55b2956a1343963d",
-                LocalDateTime.now().minusMinutes(30)));
-        return list;
-    }
-
     public List<WhaleTransaction> getHistoricalFlowData() {
+        // Keep mock data for historical flow visualization
         List<WhaleTransaction> flows = new ArrayList<>();
         for (int i = 23; i >= 0; i--) {
             flows.add(new WhaleTransaction(
@@ -76,7 +159,6 @@ public class WhaleTrackingService {
                     "outflow", "wallet",
                     LocalDateTime.now().minusHours(i)));
         }
-        // ETH flow data
         for (int i = 23; i >= 0; i--) {
             flows.add(new WhaleTransaction(
                     "eth-flow-in-" + i, "ETH",
