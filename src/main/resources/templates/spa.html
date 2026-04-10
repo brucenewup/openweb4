@@ -633,6 +633,18 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
         <span>交易Skills</span>
       </a>
+      <a href="#/perpetual-funding" class="nav-btn" data-page="perpetual-funding">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>永续多空比</span>
+      </a>
+      <a href="#/token-unlocks" class="nav-btn" data-page="token-unlocks">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+        <span>解锁日历</span>
+      </a>
+      <a href="#/audit-status" class="nav-btn" data-page="audit-status">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <span>审计速览</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -664,7 +676,7 @@ var I18N = {
   zh: {
     appName:'OpenWeb4',
     nav_dashboard:'实时行情', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控',
+    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控', nav_perpetual:'永续多空比', nav_token_unlocks:'解锁日历', nav_audit:'审计速览',
     sidebar_toggle:'收起/展开',
     dash_title:'实时行情', dash_sub:'多币种实时行情 · 大额交易监控',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -697,11 +709,22 @@ var I18N = {
     chat_tip:'Enter 发送 · Shift+Enter 换行',
     chat_err_http:'AI 服务请求失败（HTTP ', chat_err_suffix:'）',
     btn_refresh:'↻ 刷新', load_fail:'加载失败，请稍后重试',
+    pf_title:'永续合约多空比', pf_sub:'Binance 永续合约账户多空比 · 实时更新',
+    pf_symbol:'交易对', pf_ratio:'多空比', pf_long:'多头账户', pf_short:'空头账户', pf_time:'时间',
+    pf_long_pos:'多头', pf_short_pos:'空头',
+    pf_select:'选择交易对：', pf_fallback:'数据来源：Binance API',
+    tu_title:'Token 解锁日历', tu_sub:'即将解锁的 Token 线性解锁事件',
+    tu_token:'代币', tu_date:'日期', tu_amount:'数量', tu_pct:'占总供应量', tu_event:'事件', tu_days:'天',
+    tu_upcoming:'即将解锁', tu_past:'已完成', tu_no_data:'暂无解锁事件',
+    as_title:'合约审计速览', as_sub:'主流 DeFi 合约安全审计状态一览',
+    as_contract:'合约名称', as_project:'项目', as_auditor:'审计机构', as_date:'审计日期',
+    as_risk:'风险等级', as_findings:'审计发现', as_critical:'严重', as_high:'高', as_medium:'中', as_low:'低', as_info:'提示',
+    as_notes:'备注', as_report:'报告', as_no_data:'暂无审计数据',
   },
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Live Market', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor',
+    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor', nav_perpetual:'Long/Short', nav_token_unlocks:'Token Unlocks', nav_audit:'Audit Status',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -734,6 +757,17 @@ var I18N = {
     chat_tip:'Enter to send · Shift+Enter for newline',
     chat_err_http:'AI service error (HTTP ', chat_err_suffix:')',
     btn_refresh:'↻ Refresh', load_fail:'Load failed, please retry',
+    pf_title:'Perpetual Long/Short Ratio', pf_sub:'Binance Perpetual Futures Account Long/Short Ratio · Live',
+    pf_symbol:'Symbol', pf_ratio:'Long/Short Ratio', pf_long:'Long Account %', pf_short:'Short Account %', pf_time:'Time',
+    pf_long_pos:'Long', pf_short_pos:'Short',
+    pf_select:'Select Symbol:', pf_fallback:'Data: Binance API',
+    tu_title:'Token Unlock Calendar', tu_sub:'Upcoming Token Linear Unlock Events',
+    tu_token:'Token', tu_date:'Date', tu_amount:'Amount', tu_pct:'% of Supply', tu_event:'Event', tu_days:'days',
+    tu_upcoming:'Upcoming', tu_past:'Past', tu_no_data:'No unlock events',
+    as_title:'Contract Audit Status', as_sub:'Major DeFi Contract Security Audit Overview',
+    as_contract:'Contract', as_project:'Project', as_auditor:'Auditor', as_date:'Audit Date',
+    as_risk:'Risk Level', as_findings:'Findings', as_critical:'Critical', as_high:'High', as_medium:'Medium', as_low:'Low', as_info:'Info',
+    as_notes:'Notes', as_report:'Report', as_no_data:'No audit data',
   }
 };
 
@@ -879,7 +913,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills'];
+const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills','perpetual-funding','token-unlocks','audit-status'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1673,6 +1707,205 @@ renderers['market-briefing'] = function(el) {
   if (refreshBtn) {
     refreshBtn.addEventListener('click', loadBriefing);
   }
+};
+
+/* ─── Perpetual Funding (Long/Short Ratio) ─── */
+var pfChart = null;
+var pfSymbols = ['BTCUSDT','ETHUSDT','SOLUSDT','BNBUSDT','XRPUSDT','DOGEUSDT','ADAUSDT','AVAXUSDT'];
+
+renderers['perpetual-funding'] = function(el) {
+  destroyCharts();
+  var sym = pfSymbols[0];
+  var html =
+    '<div class="card" style="max-width:64rem;margin:0 auto;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">' +
+        '<div><h1 style="font-size:24px;font-weight:800;margin-bottom:4px;">' + t('pf_title') + '</h1>' +
+        '<p style="font-size:13px;color:var(--muted);">' + t('pf_sub') + '</p></div>' +
+        '<div style="display:flex;gap:10px;align-items:center;">' +
+          '<label style="font-size:13px;color:var(--muted);">' + t('pf_select') + '</label>' +
+          '<select id="pfSymbolSel" style="background:var(--surface2);border:1px solid var(--border);color:var(--fg);padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;">' +
+            pfSymbols.map(function(s){return '<option value="'+s+'"'+(s===sym?' selected':'')+'>'+s+'</option>';}).join('') +
+          '</select>' +
+          '<button id="pfRefreshBtn" class="btn-refresh" style="padding:8px 16px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--fg);cursor:pointer;font-size:13px;font-weight:600;">↻ ' + t('btn_refresh') + '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">' +
+        '<div class="stat-card"><div class="stat-label">' + t('pf_ratio') + '</div><div id="pfRatio" class="stat-value" style="font-size:28px;font-weight:800;color:var(--neon-cyan);">--</div></div>' +
+        '<div class="stat-card"><div class="stat-label">' + t('pf_long_pos') + ' %</div><div id="pfLong" class="stat-value" style="font-size:22px;font-weight:700;color:var(--up);">--</div></div>' +
+        '<div class="stat-card"><div class="stat-label">' + t('pf_short_pos') + ' %</div><div id="pfShort" class="stat-value" style="font-size:22px;font-weight:700;color:var(--down);">--</div></div>' +
+      '</div>' +
+      '<div style="background:var(--surface2);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:16px;">' +
+        '<canvas id="pfChartCanvas" height="200"></canvas>' +
+      '</div>' +
+      '<div id="pfMeta" style="font-size:12px;color:var(--muted);text-align:right;"></div>' +
+    '</div>';
+  el.innerHTML = html;
+
+  function loadPf(symbol) {
+    fetchJson('/api/perpetual-funding?symbol=' + symbol).then(function(data) {
+      if (!data) return;
+      var ratio = parseFloat(data.longShortRatio) || 0;
+      var longPct = parseFloat(data.longAccount) || 0;
+      var shortPct = parseFloat(data.shortAccount) || 0;
+      var ts = data.timeStr || '--';
+
+      document.getElementById('pfRatio').textContent = ratio.toFixed(4);
+      document.getElementById('pfLong').textContent = (longPct * 100).toFixed(2) + '%';
+      document.getElementById('pfShort').textContent = (shortPct * 100).toFixed(2) + '%';
+
+      var meta = document.getElementById('pfMeta');
+      var fallbackNote = data.fallback ? ('<span style="color:var(--neon-orange);">⚠ ' + (data.fallbackReason || 'fallback') + '</span> | ') : '';
+      meta.innerHTML = fallbackNote + t('pf_fallback') + ' | ' + ts;
+
+      // Draw/update Chart.js line chart
+      var history = data.history || [];
+      var ctx = document.getElementById('pfChartCanvas').getContext('2d');
+      if (pfChart) { pfChart.destroy(); }
+      pfChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: history.map(function(h){ return h.time ? h.time.substring(11,16) : ''; }),
+          datasets: [
+            {
+              label: t('pf_long_pos'),
+              data: history.map(function(h){ return parseFloat(h.longAccount) * 100; }),
+              borderColor: '#00ff88',
+              backgroundColor: 'rgba(0,255,136,0.08)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 2
+            },
+            {
+              label: t('pf_short_pos'),
+              data: history.map(function(h){ return parseFloat(h.shortAccount) * 100; }),
+              borderColor: '#ff3366',
+              backgroundColor: 'rgba(255,51,102,0.08)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#8899aa', font: { size: 12 } } },
+            tooltip: { mode: 'index', intersect: false }
+          },
+          scales: {
+            x: { ticks: { color: '#5a6a80', maxTicksLimit: 8 }, grid: { color: 'rgba(0,240,255,0.05)' } },
+            y: { ticks: { color: '#5a6a80' }, grid: { color: 'rgba(0,240,255,0.05)' } }
+          }
+        }
+      });
+    }).catch(function() {
+      document.getElementById('pfRatio').textContent = '--';
+      document.getElementById('pfLong').textContent = '--';
+      document.getElementById('pfShort').textContent = '--';
+    });
+  }
+
+  loadPf(sym);
+
+  document.getElementById('pfRefreshBtn').addEventListener('click', function() {
+    loadPf(document.getElementById('pfSymbolSel').value);
+  });
+  document.getElementById('pfSymbolSel').addEventListener('change', function() {
+    loadPf(this.value);
+  });
+};
+
+/* ─── Token Unlocks Calendar ─── */
+renderers['token-unlocks'] = function(el) {
+  fetchJson(apiUrl('/api/token-unlocks')).then(function(data) {
+    if (!data || !data.unlocks || data.unlocks.length === 0) {
+      el.innerHTML = '<div class="card" style="max-width:64rem;margin:0 auto;padding:60px;text-align:center;color:var(--muted);">' + t('tu_no_data') + '</div>';
+      return;
+    }
+    var unlocks = data.unlocks;
+    var html =
+      '<div class="card" style="max-width:64rem;margin:0 auto;">' +
+        '<div style="margin-bottom:24px;">' +
+          '<h1 style="font-size:24px;font-weight:800;margin-bottom:4px;">' + t('tu_title') + '</h1>' +
+          '<p style="font-size:13px;color:var(--muted);">' + t('tu_sub') + '</p>' +
+        '</div>' +
+        '<div style="overflow-x:auto;">' +
+          '<table class="data-table" style="width:100%;border-collapse:collapse;">' +
+            '<thead><tr style="border-bottom:1px solid var(--border);">' +
+              '<th style="text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_token') + '</th>' +
+              '<th style="text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_date') + '</th>' +
+              '<th style="text-align:right;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_amount') + '</th>' +
+              '<th style="text-align:right;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_pct') + '</th>' +
+              '<th style="text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_event') + '</th>' +
+              '<th style="text-align:right;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;">' + t('tu_days') + '</th>' +
+            '</tr></thead><tbody>';
+    unlocks.forEach(function(u) {
+      var days = u.daysUntil || 0;
+      var dayLabel = days === 0 ? (_lang==='en'?'Today':'今天') : (days > 0 ? ('+'+days) : days);
+      var rowStyle = days <= 7 ? 'background:rgba(0,255,136,0.05);' : (days < 0 ? 'opacity:0.5;' : '');
+      html += '<tr style="'+rowStyle+'border-bottom:1px solid var(--border);transition:all .15s;">' +
+        '<td style="padding:12px;"><span style="font-weight:600;color:var(--neon-cyan);">' + esc(u.token) + '</span><br><span style="font-size:11px;color:var(--muted);">' + esc(u.name||'') + '</span></td>' +
+        '<td style="padding:12px;font-family:\'JetBrains Mono\',monospace;font-size:13px;">' + esc(u.date || '') + '</td>' +
+        '<td style="padding:12px;text-align:right;font-family:\'JetBrains Mono\',monospace;font-size:13px;">' + fmtNum(u.amount,0) + '</td>' +
+        '<td style="padding:12px;text-align:right;font-family:\'JetBrains Mono\',monospace;font-size:13px;color:var(--neon-orange);">' + parseFloat(u.percentage||0).toFixed(3) + '%</td>' +
+        '<td style="padding:12px;font-size:12px;color:var(--muted);">' + esc(u.event || '') + '</td>' +
+        '<td style="padding:12px;text-align:right;font-family:\'JetBrains Mono\',monospace;font-size:13px;color:' + (days<=3?'var(--neon-orange)':(days<=7?'var(--neon-green)':'')) + ';">' + dayLabel + '</td>' +
+      '</tr>';
+    });
+    html += '</tbody></table></div></div>';
+    el.innerHTML = html;
+  }).catch(function() {
+    el.innerHTML = '<div class="card" style="max-width:64rem;margin:0 auto;padding:60px;text-align:center;color:var(--muted);">' + t('load_fail') + '</div>';
+  });
+};
+
+/* ─── Audit Status ─── */
+renderers['audit-status'] = function(el) {
+  fetchJson(apiUrl('/api/audit-status')).then(function(data) {
+    if (!data || !data.audits || data.audits.length === 0) {
+      el.innerHTML = '<div class="card" style="max-width:64rem;margin:0 auto;padding:60px;text-align:center;color:var(--muted);">' + t('as_no_data') + '</div>';
+      return;
+    }
+    var audits = data.audits;
+    var html =
+      '<div class="card" style="max-width:64rem;margin:0 auto;">' +
+        '<div style="margin-bottom:24px;">' +
+          '<h1 style="font-size:24px;font-weight:800;margin-bottom:4px;">' + t('as_title') + '</h1>' +
+          '<p style="font-size:13px;color:var(--muted);">' + t('as_sub') + '</p>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">';
+    audits.forEach(function(a) {
+      var riskColor = a.riskLevel === 'High' ? 'var(--down)' : a.riskLevel === 'Medium' ? 'var(--neon-orange)' : 'var(--up)';
+      var findings = a.findings || {};
+      html +=
+        '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">' +
+            '<div style="font-weight:700;font-size:14px;color:var(--fg);">' + esc(a.project || '') + '</div>' +
+            '<span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:' + riskColor + '22;color:' + riskColor + ';border:1px solid ' + riskColor + '44;">' + esc(a.riskLabel || a.riskLevel || '') + '</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-bottom:8px;">' + esc(a.contractName || '') + '</div>' +
+          '<div style="font-size:11px;font-family:\'JetBrains Mono\',monospace;color:var(--muted);margin-bottom:12px;word-break:break-all;">' + esc(a.contractAddress || '') + '</div>' +
+          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">' +
+            '<div style="text-align:center;background:var(--surface3);border-radius:8px;padding:8px 4px;"><div style="font-size:16px;font-weight:800;color:#ff3366;">' + (findings.critical||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">' + t('as_critical') + '</div></div>' +
+            '<div style="text-align:center;background:var(--surface3);border-radius:8px;padding:8px 4px;"><div style="font-size:16px;font-weight:800;color:#ff8800;">' + (findings.high||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">' + t('as_high') + '</div></div>' +
+            '<div style="text-align:center;background:var(--surface3);border-radius:8px;padding:8px 4px;"><div style="font-size:16px;font-weight:800;color:#ffcc00;">' + (findings.medium||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">' + t('as_medium') + '</div></div>' +
+            '<div style="text-align:center;background:var(--surface3);border-radius:8px;padding:8px 4px;"><div style="font-size:16px;font-weight:800;color:#00ff88;">' + (findings.low||0) + '</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">' + t('as_low') + '</div></div>' +
+          '</div>' +
+          '<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">' + t('as_auditor') + ': ' + esc(a.auditor || '') + ' · ' + t('as_date') + ': ' + esc(a.auditDate || '') + '</div>';
+      if (a.notes) {
+        html += '<div style="font-size:11px;color:var(--muted);padding:8px;background:var(--surface3);border-radius:6px;line-height:1.5;">' + esc(a.notes) + '</div>';
+      }
+      if (a.reportUrl) {
+        html += '<a href="' + esc(a.reportUrl) + '" target="_blank" style="display:inline-block;margin-top:10px;font-size:12px;color:var(--neon-cyan);text-decoration:none;">' + t('as_report') + ' ↗</a>';
+      }
+      html += '</div>';
+    });
+    html += '</div></div>';
+    el.innerHTML = html;
+  }).catch(function() {
+    el.innerHTML = '<div class="card" style="max-width:64rem;margin:0 auto;padding:60px;text-align:center;color:var(--muted);">' + t('load_fail') + '</div>';
+  });
 };
 
 /* ═══════════════════════ Dynamic Background ═══════════════════════ */

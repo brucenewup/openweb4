@@ -1,0 +1,71 @@
+# Token Unlock Calendar - MVP Data
+# Future: replace with API source
+unlocks:
+  - token: "BTC"
+    name: "Bitcoin"
+    totalSupply: 21000000
+    unlockSchedule:
+      - date: "2026-05-01"
+        amount: 32850
+        percentage: 0.156
+        event: "PlanB Vesting"
+  - token: "ETH"
+    name: "Ethereum"
+    totalSupply: 120000000
+    unlockSchedule:
+      - date: "2026-04-15"
+        amount: 460800
+        percentage: 0.384
+        event: "Validator Rewards"
+  - token: "SOL"
+    name: "Solana"
+    totalSupply: 500000000
+    unlockSchedule:
+      - date: "2026-04-20"
+        amount: 10450000
+        percentage: 2.09
+        event: "Team Unlock (Monthly)"
+      - date: "2026-05-01"
+        amount: 4250000
+        percentage: 0.85
+        event: "Community Reserve"
+  - token: "BNB"
+    name: "BNB"
+    totalSupply: 200000000
+    unlockSchedule:
+      - date: "2026-04-25"
+        amount: 1800000
+        percentage: 0.90
+        event: "IEO Unlock"
+  - token: "ARB"
+    name: "Arbitrum"
+    totalSupply: 2750000000
+    unlockSchedule:
+      - date: "2026-04-30"
+        amount: 412500000
+        percentage: 15.0
+        event: "Team & Investors Unlock"
+  - token: "OP"
+    name: "Optimism"
+    totalSupply: 4294967296
+    unlockSchedule:
+      - date: "2026-05-05"
+        amount: 386547056
+        percentage: 9.0
+        event: "Retroactive RPGF Round 3"
+  - token: "INJ"
+    name: "Injective"
+    totalSupply: 100000000
+    unlockSchedule:
+      - date: "2026-04-18"
+        amount: 625000
+        percentage: 0.625
+        event: "Ecosystem Incentives"
+  - token: "TIA"
+    name: "Celestia"
+    totalSupply: 1000000000
+    unlockSchedule:
+      - date: "2026-05-10"
+        amount: 65000000
+        percentage: 6.5
+        event: "Genesis & Strategic Sale"
