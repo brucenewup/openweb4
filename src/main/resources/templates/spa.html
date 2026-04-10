@@ -633,7 +633,7 @@ a.tx-skill-open:hover {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/><path d="M15 10h3"/><path d="M15 14h3"/></svg>
         <span>交易Skills</span>
       </a>
-      <a href="#/perpetual-funding" class="nav-btn" data-page="perpetual-funding">
+<a href="#/perpetual-funding" class="nav-btn" data-page="perpetual-funding">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         <span>永续多空比</span>
       </a>
@@ -644,6 +644,22 @@ a.tx-skill-open:hover {
       <a href="#/audit-status" class="nav-btn" data-page="audit-status">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
         <span>审计速览</span>
+      </a>
+      <a href="#/hot-coins" class="nav-btn" data-page="hot-coins">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>热度雷达</span>
+      </a>
+      <a href="#/sentiment" class="nav-btn" data-page="sentiment">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <span>KOL情绪</span>
+      </a>
+      <a href="#/heatmap" class="nav-btn" data-page="heatmap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+        <span>市值热力图</span>
+      </a>
+      <a href="#/exchanges" class="nav-btn" data-page="exchanges">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h6"/><path d="M6 14h4"/></svg>
+        <span>交易所对比</span>
       </a>
     </nav>
 
@@ -676,7 +692,7 @@ var I18N = {
   zh: {
     appName:'OpenWeb4',
     nav_dashboard:'实时行情', nav_news:'行情新闻', nav_kol:'大V推文',
-    nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控', nav_perpetual:'永续多空比', nav_token_unlocks:'解锁日历', nav_audit:'审计速览',
+nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控', nav_perpetual:'永续多空比', nav_token_unlocks:'解锁日历', nav_audit:'审计速览', nav_hot_coins:'热度雷达', nav_sentiment:'KOL情绪', nav_heatmap:'市值热力图', nav_exchanges:'交易所对比',
     sidebar_toggle:'收起/展开',
     dash_title:'实时行情', dash_sub:'多币种实时行情 · 大额交易监控',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -724,7 +740,7 @@ var I18N = {
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Live Market', nav_news:'Market News', nav_kol:'KOL Tweets',
-    nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor', nav_perpetual:'Long/Short', nav_token_unlocks:'Token Unlocks', nav_audit:'Audit Status',
+nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor', nav_perpetual:'Long/Short', nav_token_unlocks:'Token Unlocks', nav_audit:'Audit Status', nav_hot_coins:'Hot Coins', nav_sentiment:'KOL Sentiment', nav_heatmap:'Market Cap Heatmap', nav_exchanges:'Exchange Comparison',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -869,7 +885,8 @@ if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(tr
 
 /* ═══════════════════════ Language Switch ═══════════════════════ */
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
-  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'market-briefing':'nav_briefing', 'contract':'nav_contract', 'onchain':'nav_onchain'};
+  'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'market-briefing':'nav_briefing', 'contract':'nav_contract', 'onchain':'nav_onchain',
+  'hot-coins':'nav_hot_coins', 'sentiment':'nav_sentiment', 'heatmap':'nav_heatmap', 'exchanges':'nav_exchanges'};
 
 /** Sync sidebar nav text, lang toggle UI, html[lang] — brand "OpenWeb4" stays fixed (not localized) */
 function syncSidebarI18n() {
@@ -913,7 +930,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills','perpetual-funding','token-unlocks','audit-status'];
+const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills','perpetual-funding','token-unlocks','audit-status','hot-coins','sentiment','heatmap','exchanges'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
@@ -1906,6 +1923,223 @@ renderers['audit-status'] = function(el) {
   }).catch(function() {
     el.innerHTML = '<div class="card" style="max-width:64rem;margin:0 auto;padding:60px;text-align:center;color:var(--muted);">' + t('load_fail') + '</div>';
   });
+};
+
+/* ─── Hot Coins (P2-7) ─── */
+renderers['hot-coins'] = function(el, forceRefresh) {
+  fetchJson(apiUrl('/api/hot-coins', !!forceRefresh)).then(function(data) {
+    var coins = data.coins || [];
+    var cards = coins.length ? coins.map(function(c, i) {
+      var scoreColor = c.score >= 80 ? 'var(--neon-green)' : c.score >= 50 ? 'var(--neon-cyan)' : 'var(--neon-orange)';
+      var badgeCls = c.marketCapRank <= 3 ? 'badge-btc' : c.marketCapRank <= 10 ? 'badge-eth' : c.marketCapRank <= 20 ? 'badge-sol' : '';
+      return '<div class="news-card" style="animation:fadeInUp .4s ease forwards;opacity:0;animation-delay:'+(i*50)+'ms;">'
+        +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">'
+        +'<span style="font-size:28px;font-weight:900;font-family:\'Orbitron\',sans-serif;color:'+scoreColor+';text-shadow:0 0 12px '+scoreColor+';">'+esc(c.symbol)+'</span>'
+        +'<div><div style="font-weight:700;font-size:16px;">'+esc(c.name)+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);font-family:\'JetBrains Mono\',monospace;">Rank #'+c.marketCapRank+'</div></div>'
+        +'<div style="margin-left:auto;text-align:right;">'
+        +'<div style="font-size:22px;font-weight:700;color:'+scoreColor+';">'+fmtNum(c.score,0)+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);">'+(i < 3 ? (_lang==='en'?'🔥 Hot':'🔥 热门') : (_lang==='en'?'⭐ Trending':'⭐ 趋势'))+'</div></div>'
+        +'</div></div>';
+    }).join('') : '<div class="card" style="text-align:center;padding:64px 0;"><p style="color:var(--muted);">'+( _lang==='en'?'No trending coins available':'暂无热门币种')+'</p></div>';
+
+    el.innerHTML = '<div class="page-fade-in">'
+      +'<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;">'
+      +'<div><h1 class="page-title">'+( _lang==='en'?'Hot Coins Radar':'山寨币热度雷达')+'</h1><p class="page-sub">'+( _lang==='en'?'Trending coins from CoinGecko · Updated every 5 min':'CoinGecko 热门币种 · 每5分钟更新')+'</p></div>'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+      +'<button type="button" class="btn-primary" onclick="renderers[\'hot-coins\'](\$(\'pageContent\'), true)">'+t('btn_refresh')+'</button>'
+      +'</div></div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">'+cards+'</div>'
+      +'</div>';
+  }).catch(function() {
+    el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>';
+  });
+};
+
+/* ─── KOL Sentiment (P2-8) ─── */
+renderers['sentiment'] = function(el, forceRefresh) {
+  destroyCharts();
+  fetchJson(apiUrl('/api/sentiment', !!forceRefresh)).then(function(data) {
+    var posCount = data.positiveCount || 0;
+    var negCount = data.negativeCount || 0;
+    var neuCount = data.neutralCount || 0;
+    var posRatio = data.positiveRatio || 50;
+    var trend = data.overallTrend || 'neutral';
+    var trendLabel = trend === 'bullish' ? (_lang==='en'?'🐂 Bullish':'🐂 看涨') : trend === 'bearish' ? (_lang==='en'?'🐻 Bearish':'🐻 看跌') : (_lang==='en'?'➖ Neutral':'➖ 中性');
+    var trendColor = trend === 'bullish' ? 'var(--neon-green)' : trend === 'bearish' ? 'var(--neon-red)' : 'var(--neon-cyan)';
+    var posTweets = data.positiveTweets || [];
+    var negTweets = data.negativeTweets || [];
+
+    var posCards = posTweets.length ? posTweets.map(function(t) {
+      return '<div class="news-card" style="border-left:3px solid var(--neon-green);">'
+        +'<div style="font-weight:700;color:var(--neon-green);margin-bottom:6px;">'+esc(t.author||t.handle||'KOL')+' <span style="color:var(--muted);font-size:12px;">@'+esc(t.handle||'')+'</span></div>'
+        +'<p style="font-size:13px;color:var(--muted);line-height:1.6;">'+esc(truncStr(t.text||'', 200))+'</p>'
+        +'<div style="margin-top:8px;font-size:12px;color:var(--neon-green);font-family:\'JetBrains Mono\',monospace;">+'+(t.score||50)+'</div></div>';
+    }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">--</p>';
+
+    var negCards = negTweets.length ? negTweets.map(function(t) {
+      return '<div class="news-card" style="border-left:3px solid var(--neon-red);">'
+        +'<div style="font-weight:700;color:var(--neon-red);margin-bottom:6px;">'+esc(t.author||t.handle||'KOL')+' <span style="color:var(--muted);font-size:12px;">@'+esc(t.handle||'')+'</span></div>'
+        +'<p style="font-size:13px;color:var(--muted);line-height:1.6;">'+esc(truncStr(t.text||'', 200))+'</p>'
+        +'<div style="margin-top:8px;font-size:12px;color:var(--neon-red);font-family:\'JetBrains Mono\',monospace;">'+(t.score||(-50))+'</div></div>';
+    }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">--</p>';
+
+    el.innerHTML = '<div class="page-fade-in">'
+      +'<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;">'
+      +'<div><h1 class="page-title" style="background:linear-gradient(135deg,var(--neon-purple),var(--neon-cyan));-webkit-background-clip:text;background-clip:text;">'+(_lang==='en'?'KOL Sentiment Analysis':'KOL情绪分析')+'</h1><p class="page-sub">'+( _lang==='en'?'Based on latest KOL tweets · AI sentiment scoring':'基于最新 KOL 推文 · AI 情绪评分')+'</p></div>'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+      +'<button type="button" class="btn-primary" onclick="renderers[\'sentiment\'](\$(\'pageContent\'), true)">'+t('btn_refresh')+'</button>'
+      +'</div></div>'
+
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">'
+      +'<div class="card" style="text-align:center;">'
+      +'<div style="height:200px;position:relative;"><canvas id="sentimentPieChart"></canvas></div>'
+      +'</div>'
+      +'<div class="card">'
+      +'<div style="text-align:center;margin-bottom:20px;">'
+      +'<div style="font-size:48px;font-weight:800;color:'+trendColor+';text-shadow:0 0 20px '+trendColor+';">'+fmtNum(posRatio,1)+'%</div>'
+      +'<div class="tone '+(trend==='bullish'?'good':trend==='bearish'?'danger':'neutral')+'" style="display:inline-block;margin-top:8px;font-size:14px;">'+trendLabel+'</div>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">'
+      +'<div><div style="font-size:24px;font-weight:700;color:var(--neon-green);">'+posCount+'</div><div style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'Positive':'正面')+'</div></div>'
+      +'<div><div style="font-size:24px;font-weight:700;color:var(--neon-cyan);">'+neuCount+'</div><div style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'Neutral':'中性')+'</div></div>'
+      +'<div><div style="font-size:24px;font-weight:700;color:var(--neon-red);">'+negCount+'</div><div style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'Negative':'负面')+'</div></div>'
+      +'</div></div>'
+      +'</div>'
+
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">'
+      +'<div class="panel"><h2 style="font-size:16px;margin-bottom:14px;">'+( _lang==='en'?'🟢 Positive Tweets':'🟢 正面推文')+'</h2><div style="display:flex;flex-direction:column;gap:12px;">'+posCards+'</div></div>'
+      +'<div class="panel"><h2 style="font-size:16px;margin-bottom:14px;">'+( _lang==='en'?'🔴 Negative Tweets':'🔴 负面推文')+'</h2><div style="display:flex;flex-direction:column;gap:12px;">'+negCards+'</div></div>'
+      +'</div>'
+      +'</div>';
+
+    // Draw Chart.js pie chart
+    setTimeout(function() {
+      var canvas = document.getElementById('sentimentPieChart');
+      if (canvas) {
+        var isDark = document.documentElement.dataset.theme !== 'light';
+        var chart = new Chart(canvas, {
+          type: 'doughnut',
+          data: {
+            labels: [_lang==='en'?'Positive':'正面', _lang==='en'?'Neutral':'中性', _lang==='en'?'Negative':'负面'],
+            datasets: [{
+              data: [posCount || 1, neuCount || 1, negCount || 1],
+              backgroundColor: ['rgba(0,255,136,0.75)', 'rgba(0,240,255,0.75)', 'rgba(255,51,102,0.75)'],
+              borderColor: ['#00ff88', '#00f0ff', '#ff3366'],
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: isDark ? '#e8edf5' : '#0a0e17', font: { size: 12 } }
+              }
+            }
+          }
+        });
+        activeCharts.push(chart);
+      }
+    }, 100);
+  }).catch(function() {
+    el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>';
+  });
+};
+
+/* ─── Market Cap Heatmap (P2-9) ─── */
+renderers['heatmap'] = function(el, forceRefresh) {
+  fetchJson(apiUrl('/api/heatmap', !!forceRefresh)).then(function(data) {
+    var items = data.items || [];
+    var totalMarketCap = items.reduce(function(s, i) { return s + (i.marketCap||0); }, 0);
+
+    var cells = items.map(function(c, i) {
+      var size = Math.max(60, Math.min(140, c.marketCapPercent * 5));
+      var color = c.color || '#00f0ff';
+      var changeColor = c.marketCapChange24h >= 0 ? 'var(--neon-green)' : 'var(--neon-red)';
+      var changeSign = c.marketCapChange24h >= 0 ? '+' : '';
+      return '<div style="'
+        +'min-width:90px;min-height:90px;background:linear-gradient(135deg,rgba(0,0,0,0.3),'+color+'22);'
+        +'border:1px solid '+color+'44;border-radius:12px;padding:12px;'
+        +'display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;'
+        +'transition:all .3s;cursor:default;'
+        +'" title="'+esc(c.name)+' ('+c.symbol+')'+'\n'+( _lang==='en'?'Market Cap: ':'市值: ')+fmtPrice(c.marketCap,0)+'\n'+( _lang==='en'?'24h: ':'24小时: ')+changeSign+fmtNum(c.marketCapChange24h,2)+'%">'
+        +'<span style="font-size:16px;font-weight:800;color:'+color+';font-family:\'Orbitron\',sans-serif;">'+esc(c.symbol)+'</span>'
+        +'<span style="font-size:11px;color:var(--fg);text-align:center;">'+esc(c.name)+'</span>'
+        +'<span style="font-size:13px;font-weight:700;color:'+changeColor+';">'+changeSign+fmtNum(c.marketCapChange24h,2)+'%</span>'
+        +'<span style="font-size:10px;color:var(--muted);">'+fmtBigNum(c.marketCap)+'</span>'
+        +'</div>';
+    }).join('');
+
+    el.innerHTML = '<div class="page-fade-in">'
+      +'<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;">'
+      +'<div><h1 class="page-title">'+( _lang==='en'?'Crypto Market Cap Heatmap':'加密市值热力图')+'</h1><p class="page-sub">'+( _lang==='en'?'Top 50 coins by market cap · Color indicates 24h change':'按市值排序前50币种 · 颜色表示24小时涨跌')+'</p></div>'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+      +'<button type="button" class="btn-primary" onclick="renderers[\'heatmap\'](\$(\'pageContent\'), true)">'+t('btn_refresh')+'</button>'
+      +'</div></div>'
+
+      +'<div class="card" style="margin-bottom:18px;padding:16px;">'
+      +'<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;">'
+      +'<span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'Color legend: ':'颜色图例: ')+'</span>'
+      +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;background:#00ff88;border-radius:4px;"></span><span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'+10%+':'+10%+')+'</span></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;background:#00cc66;border-radius:4px;"></span><span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'+5%':'+5%')+'</span></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;background:#66aa44;border-radius:4px;"></span><span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'0%':'0%')+'</span></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;background:#cc4444;border-radius:4px;"></span><span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'-5%':'-5%')+'</span></div>'
+      +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:16px;height:16px;background:#ff3366;border-radius:4px;"></span><span style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'-10%+':'-10%+')+'</span></div>'
+      +'</div>'
+      +'<div style="font-size:12px;color:var(--muted);">'+( _lang==='en'?'Total Market Cap: ':'总市值: ')+fmtPrice(totalMarketCap,0)+'</div>'
+      +'</div>'
+
+      +'<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;">'+cells+'</div>'
+      +'</div>';
+  }).catch(function() {
+    el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>';
+  });
+};
+
+/* ─── Exchange Capabilities (P2-10) ─── */
+renderers['exchanges'] = function(el, forceRefresh) {
+  fetchJson(apiUrl('/api/exchange-capabilities', false)).then(function(data) {
+    var exchanges = data.exchanges || [];
+    var rows = exchanges.map(function(ex) {
+      var scoreColor = ex.score >= 8 ? 'var(--neon-green)' : ex.score >= 6 ? 'var(--neon-cyan)' : 'var(--neon-orange)';
+      return '<tr>'
+        +'<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">'+esc(ex.exchange)+'</td>'
+        +'<td class="table-cell">'+esc(ex.officialSkill||'-')+'</td>'
+        +'<td class="table-cell"><a href="'+esc(ex.link||'#')+'" target="_blank" rel="noopener noreferrer" class="tx-skill-open">'+t('tx_open')+'</a></td>'
+        +'<td class="table-cell">'+esc(ex.installDifficulty||'-')+'</td>'
+        +'<td class="table-cell">'+esc(ex.strengths||'-')+'</td>'
+        +'<td class="table-cell">'+esc(ex.security||'-')+'</td>'
+        +'<td class="table-cell">'+esc(ex.scope||'-')+'</td>'
+        +'<td class="table-cell" style="font-weight:800;color:'+scoreColor+';">'+ex.score+'/10</td>'
+        +'</tr>';
+    }).join('');
+
+    el.innerHTML = '<div class="page-fade-in">'
+      +'<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;">'
+      +'<div><h1 class="page-title">'+( _lang==='en'?'Exchange Comparison':'交易所能力对比')+'</h1><p class="page-sub">'+( _lang==='en'?'Compare 6 major exchanges by capability score':'对比6家主流交易所能力评分')+'</p></div>'
+      +'</div>'
+      +'<div class="panel">'
+      +'<h2>'+( _lang==='en'?'Exchange Capability Comparison':'交易所能力对比卡片')+'</h2>'
+      +'<div style="overflow-x:auto;border-radius:10px;margin-top:14px;">'
+      +'<table style="width:100%;border-collapse:collapse;min-width:1000px;">'
+      +'<thead><tr>'
+      +'<th class="table-header">'+t('tx_col_exchange')+'</th>'
+      +'<th class="table-header">'+t('tx_col_official')+'</th>'
+      +'<th class="table-header">'+t('tx_col_link')+'</th>'
+      +'<th class="table-header">'+t('tx_col_diff')+'</th>'
+      +'<th class="table-header">'+t('tx_col_strength')+'</th>'
+      +'<th class="table-header">'+t('tx_col_security')+'</th>'
+      +'<th class="table-header">'+t('tx_col_scope')+'</th>'
+      +'<th class="table-header">'+t('tx_col_score')+'</th>'
+      +'</tr></thead>'
+      +'<tbody>'+rows+'</tbody>'
+      +'</table></div></div>'
+      +'</div>';
+  }).catch(function() {
+    el.innerHTML = '<div class="page-fade-in" style="text-align:center;padding:80px;color:var(--muted);">'+t('load_fail')+'</div>';
+});
 };
 
 /* ═══════════════════════ Dynamic Background ═══════════════════════ */

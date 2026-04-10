@@ -1,0 +1,54 @@
+exchanges:
+  - exchange: Binance
+    officialSkill: Binance Smart Chain Skills
+    link: https://skill.ox.ooo/bnb
+    installDifficulty: Low
+    strengths: Low fees, high liquidity, extensive trading pairs
+    security: Advanced risk control, SAFU fund
+    scope: Spot, Futures, NFT, DeFi, Staking
+    score: 9
+
+  - exchange: Coinbase
+    officialSkill: Coinbase Commerce
+    link: https://skill.ox.ooo/coinbase
+    installDifficulty: Medium
+    strengths: Regulatory compliant, secure, user-friendly
+    security: Bank-grade security, insurance coverage
+    scope: Spot, Custody, Developer APIs
+    score: 8
+
+  - exchange: Kraken
+    officialSkill: Kraken Pro Skills
+    link: https://skill.ox.ooo/kraken
+    installDifficulty: Medium
+    strengths: Strong security, good liquidity, fiat support
+    security: Proof of reserves, cold storage
+    scope: Spot, Futures, Margin
+    score: 8
+
+  - exchange: OKX
+    officialSkill: OKX Trading Skills
+    link: https://skill.ox.ooo/okx
+    installDifficulty: Low
+    strengths: Comprehensive features, competitive fees
+    security: Multi-tier security system
+    scope: Spot, Futures, Options, DeFi
+    score: 8
+
+  - exchange: Bybit
+    officialSkill: Bybit Trading Bot
+    link: https://skill.ox.ooo/bybit
+    installDifficulty: Low
+    strengths: Derivatives focus, fast execution, good API
+    security: 300M protection fund
+    scope: Spot, Derivatives, NFT
+    score: 7
+
+  - exchange: Bitget
+    officialSkill: Bitget Trading Signals
+    link: https://skill.ox.ooo/bitget
+    installDifficulty: Low
+    strengths: Copy trading, low fees, good API
+    security: 400M protection fund
+    scope: Spot, Futures, Copy Trading
+    score: 7

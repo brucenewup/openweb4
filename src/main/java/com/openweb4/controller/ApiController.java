@@ -1,12 +1,20 @@
 package com.openweb4.controller;
 
 import com.openweb4.model.CryptoPrice;
+import com.openweb4.model.ExchangeCapability;
+import com.openweb4.model.HotCoin;
+import com.openweb4.model.MarketCapItem;
 import com.openweb4.model.NewsArticle;
+import com.openweb4.model.SentimentResult;
 import com.openweb4.model.TweetAuthor;
 import com.openweb4.model.TweetItem;
 import com.openweb4.model.WhaleTransaction;
 import com.openweb4.service.CryptoPriceService;
+import com.openweb4.service.ExchangeCapabilityService;
+import com.openweb4.service.HotCoinService;
+import com.openweb4.service.MarketCapHeatmapService;
 import com.openweb4.service.NewsService;
+import com.openweb4.service.SentimentAnalysisService;
 import com.openweb4.service.TransactionSkillService;
 import com.openweb4.service.WhaleTrackingService;
 import com.openweb4.service.TweetService;
@@ -29,17 +37,29 @@ public class ApiController {
     private final NewsService newsService;
     private final TweetService tweetService;
     private final TransactionSkillService transactionSkillService;
+    private final HotCoinService hotCoinService;
+    private final SentimentAnalysisService sentimentAnalysisService;
+    private final MarketCapHeatmapService marketCapHeatmapService;
+    private final ExchangeCapabilityService exchangeCapabilityService;
 
     public ApiController(CryptoPriceService cryptoPriceService,
                          WhaleTrackingService whaleTrackingService,
                          NewsService newsService,
                          TweetService tweetService,
-                         TransactionSkillService transactionSkillService) {
+                         TransactionSkillService transactionSkillService,
+                         HotCoinService hotCoinService,
+                         SentimentAnalysisService sentimentAnalysisService,
+                         MarketCapHeatmapService marketCapHeatmapService,
+                         ExchangeCapabilityService exchangeCapabilityService) {
         this.cryptoPriceService = cryptoPriceService;
         this.whaleTrackingService = whaleTrackingService;
         this.newsService = newsService;
         this.tweetService = tweetService;
         this.transactionSkillService = transactionSkillService;
+        this.hotCoinService = hotCoinService;
+        this.sentimentAnalysisService = sentimentAnalysisService;
+        this.marketCapHeatmapService = marketCapHeatmapService;
+        this.exchangeCapabilityService = exchangeCapabilityService;
     }
 
     @GetMapping("/api/overview")
@@ -156,5 +176,47 @@ public class ApiController {
                                                  Locale locale) {
         Locale effectiveLocale = resolveLocale(lang, locale);
         return transactionSkillService.getComparison(effectiveLocale);
+    }
+
+    // P2-7: 山寨币热度雷达
+    @GetMapping("/api/hot-coins")
+    public Map<String, Object> hotCoins() {
+        List<HotCoin> coins = hotCoinService.getTrendingCoins();
+        return Map.of("coins", coins);
+    }
+
+    // P2-8: KOL情绪分析
+    @GetMapping("/api/sentiment")
+    public Map<String, Object> sentiment(@RequestParam(name = "refresh", required = false, defaultValue = "0") int refresh) {
+        SentimentResult result = sentimentAnalysisService.analyze(refresh == 1);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("positiveCount", result.getPositiveCount());
+        body.put("negativeCount", result.getNegativeCount());
+        body.put("neutralCount", result.getNeutralCount());
+        body.put("positiveRatio", result.getPositiveRatio());
+        body.put("overallTrend", result.getOverallTrend());
+        body.put("positiveTweets", result.getPositiveTweets());
+        body.put("negativeTweets", result.getNegativeTweets());
+        return body;
+    }
+
+    // P2-9: 加密市值热力图
+    @GetMapping("/api/heatmap")
+    public Map<String, Object> heatmap() {
+        List<MarketCapItem> items = marketCapHeatmapService.getHeatmapData();
+        return Map.of("items", items);
+    }
+
+    // P2-10: 交易所能力对比卡片
+    @GetMapping("/api/exchange-capabilities")
+    public Map<String, Object> exchangeCapabilities(@RequestParam(name = "lang", required = false, defaultValue = "") String lang,
+                                                   Locale locale) {
+        Locale effectiveLocale = resolveLocale(lang, locale);
+        String langKey = effectiveLocale.getLanguage().startsWith("zh") ? "zh" : "en";
+        List<ExchangeCapability> caps = exchangeCapabilityService.getCapabilities(langKey);
+        return Map.of(
+                "exchanges", caps,
+                "updatedAt", java.time.LocalDateTime.now().toString()
+        );
     }
 }
