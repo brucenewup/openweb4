@@ -1,6 +1,7 @@
 package com.openweb4.security;
 
 import com.openweb4.config.AppProperties;
+import com.openweb4.util.RateLimitSlot;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -14,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 防刷限流：对带 refresh=1 的 GET 请求与 AI 流式对话 POST 按客户端 IP 做固定窗口计数。
@@ -98,33 +98,23 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
 
     /**
      * 固定时间窗口计数（线程安全实现）。
-     * 使用 ConcurrentHashMap<key, Slot> + AtomicInteger 替代原来的 mutable Slot.count + boolean[] hack。
+     * 使用 ConcurrentHashMap<key, RateLimitSlot> + AtomicInteger 替代原来的 mutable Slot.count + boolean[] hack。
      */
     static final class FixedWindowLimiter {
-        private final ConcurrentHashMap<String, Slot> map = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<String, RateLimitSlot> map = new ConcurrentHashMap<>();
 
         boolean tryAcquire(String key, long windowMs, int max) {
             long wid = System.currentTimeMillis() / windowMs;
             // 获取或创建当前窗口的 Slot
-            Slot slot = map.compute(key, (k, v) -> {
-                if (v == null || v.windowId != wid) {
-                    return new Slot(wid);
+            RateLimitSlot slot = map.compute(key, (k, v) -> {
+                if (v == null || v.getWindowId() != wid) {
+                    return new RateLimitSlot(wid);
                 }
                 return v;
             });
             // 原子递增并检查是否超限
-            int current = slot.count.incrementAndGet();
+            int current = slot.getCount().incrementAndGet();
             return current <= max;
-        }
-
-        static final class Slot {
-            final long windowId;
-            final AtomicInteger count;
-
-            Slot(long windowId) {
-                this.windowId = windowId;
-                this.count = new AtomicInteger(0);
-            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.openweb4.service;
 
 import com.google.gson.Gson;
 import com.openweb4.config.AppProperties;
+import com.openweb4.util.RateLimitSlot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Standalone WebSocket handler for the AI Chat page.
@@ -30,8 +30,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private static final long WS_WINDOW_MS = 60_000L;
 
     private final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-    /** per-IP 限流计数：key=ip, value=Slot */
-    private final ConcurrentHashMap<String, WsSlot> wsRateLimiter = new ConcurrentHashMap<>();
+    /** per-IP 限流计数：key=ip, value=RateLimitSlot */
+    private final ConcurrentHashMap<String, RateLimitSlot> wsRateLimiter = new ConcurrentHashMap<>();
     private final AppProperties appProperties;
     private final AiChatService aiChatService;
     private final InputSanitizer inputSanitizer;
@@ -122,19 +122,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private boolean wsAcquire(String ip) {
         long wid = System.currentTimeMillis() / WS_WINDOW_MS;
-        WsSlot slot = wsRateLimiter.compute(ip, (k, v) -> {
-            if (v == null || v.windowId != wid) return new WsSlot(wid);
+        RateLimitSlot slot = wsRateLimiter.compute(ip, (k, v) -> {
+            if (v == null || v.getWindowId() != wid) return new RateLimitSlot(wid);
             return v;
         });
-        return slot.count.incrementAndGet() <= WS_MAX_PER_WINDOW;
-    }
-
-    private static final class WsSlot {
-        final long windowId;
-        final AtomicInteger count;
-        WsSlot(long windowId) {
-            this.windowId = windowId;
-            this.count = new AtomicInteger(0);
-        }
+        return slot.getCount().incrementAndGet() <= WS_MAX_PER_WINDOW;
     }
 }
