@@ -700,7 +700,7 @@ var I18N = {
   zh: {
     appName:'OpenWeb4',
     nav_dashboard:'实时行情', nav_news:'行情新闻', nav_kol:'大V推文',
-nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控', nav_perpetual:'永续多空比', nav_token_unlocks:'解锁日历', nav_audit:'审计速览', nav_hot_coins:'热度雷达', nav_sentiment:'KOL情绪', nav_heatmap:'市值热力图', nav_exchanges:'交易所对比',
+nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Skills', nav_chat:'AI 对话', nav_briefing:'市场简报', nav_contract:'合约监控', nav_onchain:'链上监控', nav_perpetual:'永续多空比', nav_token_unlocks:'解锁日历', nav_audit:'审计速览', nav_hot_coins:'热度雷达', nav_sentiment:'KOL情绪', nav_heatmap:'市值热力图', nav_rwa:'RWA 代币化', nav_ai_agents:'AI Agent 交易', nav_exchanges:'交易所对比',
     sidebar_toggle:'收起/展开',
     dash_title:'实时行情', dash_sub:'多币种实时行情 · 大额交易监控',
     dash_stablecoin:'稳定币', dash_flow_btc:'BTC 大户资金流向 (24h)', dash_flow_eth:'ETH 大户资金流向 (24h)',
@@ -748,7 +748,7 @@ nav_forecast:'行情预测', nav_indices:'行情指数', nav_tx_skills:'交易Sk
   en: {
     appName:'OnChain Monitor',
     nav_dashboard:'Live Market', nav_news:'Market News', nav_kol:'KOL Tweets',
-nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor', nav_perpetual:'Long/Short', nav_token_unlocks:'Token Unlocks', nav_audit:'Audit Status', nav_hot_coins:'Hot Coins', nav_sentiment:'KOL Sentiment', nav_heatmap:'Market Cap Heatmap', nav_exchanges:'Exchange Comparison',
+nav_forecast:'Forecast', nav_indices:'Indices', nav_tx_skills:'Trading Skills', nav_chat:'AI Chat', nav_briefing:'Market Briefing', nav_contract:'Futures', nav_onchain:'On-Chain Monitor', nav_perpetual:'Long/Short', nav_token_unlocks:'Token Unlocks', nav_audit:'Audit Status', nav_hot_coins:'Hot Coins', nav_sentiment:'KOL Sentiment', nav_heatmap:'Market Cap Heatmap', nav_rwa:'RWA Tokenization', nav_ai_agents:'AI Agent Trading', nav_exchanges:'Exchange Comparison',
     sidebar_toggle:'Collapse/Expand',
     dash_title:'On-Chain Fund Monitor', dash_sub:'BTC · ETH · USDT Live Prices',
     dash_stablecoin:'Stablecoin', dash_flow_btc:'BTC Whale Flow (24h)', dash_flow_eth:'ETH Whale Flow (24h)',
@@ -895,7 +895,7 @@ if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(tr
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
   'market-forecast':'nav_forecast', 'market-indices':'nav_indices', 'transaction-skills':'nav_tx_skills', 'ai-chat':'nav_chat', 'market-briefing':'nav_briefing', 'contract':'nav_contract', 'onchain':'nav_onchain',
   'perpetual-funding':'nav_perpetual', 'token-unlocks':'nav_token_unlocks', 'audit-status':'nav_audit',
-  'hot-coins':'nav_hot_coins', 'sentiment':'nav_sentiment', 'heatmap':'nav_heatmap', 'exchanges':'nav_exchanges'};
+  'hot-coins':'nav_hot_coins', 'sentiment':'nav_sentiment', 'heatmap':'nav_heatmap', 'rwa-projects':'nav_rwa', 'ai-agents':'nav_ai_agents', 'exchanges':'nav_exchanges'};
 
 /** Sync sidebar nav text, lang toggle UI, html[lang] — brand "OpenWeb4" stays fixed (not localized) */
 function syncSidebarI18n() {
@@ -939,7 +939,7 @@ updateThemeBtn();
 
 /* ═══════════════════════ Router ═══════════════════════ */
 let currentPage = null;
-const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills','perpetual-funding','token-unlocks','audit-status','hot-coins','sentiment','heatmap','exchanges'];
+const PAGES = ['dashboard','onchain','contract','news','kol-tweets','market-forecast','market-indices','ai-chat','market-briefing','transaction-skills','perpetual-funding','token-unlocks','audit-status','hot-coins','sentiment','heatmap','rwa-projects','ai-agents','exchanges'];
 
 function getPageFromHash() {
   var h = location.hash.replace('#/','').replace('#','');
