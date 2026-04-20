@@ -169,3 +169,23 @@
 | 17  | **ChatWebSocketHandler.sessions 无过期清理** | 断连 session 不自动移除，需加清理逻辑                                 | 低   |
 
 
+---
+
+## 2026 Q2 新增功能（基于币圈热点分析）
+
+> 来源：2026-04-20 币圈热点分析（RWA、AI Agent、Base L2、预测市场）
+> 详细分析：`ANALYSIS_2026-04-20.md`
+
+| #   | 功能             | 说明                                      | 依赖       | 状态 |
+| --- | -------------- | --------------------------------------- | -------- | --- |
+| 18  | **RWA 代币化监控**  | 追踪真实资产代币化项目（Centrifuge、MakerDAO RWA、Ondo Finance 等），展示 TVL、抵押品类型、透明度评分 | 无（静态数据） | ✅ 已完成 |
+| 19  | **AI Agent 交易监控** | 监控 AI 交易代理活动（OpenClaw、Virtuals Protocol、PolyStrat 等），展示 24h 交易量、成功率、策略类型 | 无（静态数据） | ✅ 已完成 |
+| 20  | **Base L2 生态监控** | 对比 Base vs Arbitrum vs Optimism（TVL、TPS、Gas、生态项目数） | L2Beat API | 🔄 计划中 |
+| 21  | **预测市场集成** | 集成 Polymarket 数据，展示加密货币价格预测市场、事件概率 | Polymarket API | 🔄 计划中 |
+| 22  | **Stablecoin 监控仪表盘** | 追踪 USDT、USDC、DAI、FRAX、USDe，展示市值、储备透明度、脱锚历史 | CoinGecko API | 🔄 计划中 |
+
+### API 端点
+
+- `GET /api/rwa-projects?lang=zh|en` — RWA 项目列表
+- `GET /api/ai-agents?lang=zh|en` — AI Agent 活动监控
+
