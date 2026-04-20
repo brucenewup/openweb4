@@ -2726,30 +2726,30 @@ renderers['rwa-projects'] = function(el, forceRefresh) {
     .then(function(data) {
       var projects = data.projects || [];
       var rows = projects.map(function(p) {
-        return '<tr style=\"border-bottom:1px solid var(--border);transition:background 0.2s;\" onmouseover=\"this.style.background=\\'rgba(0,240,255,0.03)\\'\" onmouseout=\"this.style.background=\\'transparent\\'\">'\
-          +'<td class=\"table-cell\" style=\"font-weight:700;color:var(--neon-cyan);\">'+esc(p.name)+'</td>'\
-          +'<td class=\"table-cell\" style=\"text-align:right;font-family:\\'JetBrains Mono\\',monospace;font-weight:700;\">$'+fmtBigNum(p.tvl)+'</td>'\
-          +'<td class=\"table-cell\">'+esc(p.assetType)+'</td>'\
-          +'<td class=\"table-cell\" style=\"text-align:center;\"><span class=\"badge\" style=\"background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);\">'+p.transparencyScore+'/100</span></td>'\
-          +'<td class=\"table-cell\" style=\"text-align:center;\">'+(p.hasProofOfPortfolio?'<span style=\"color:var(--neon-green);font-size:18px;\">✓</span>':'<span style=\"color:var(--muted);\">—</span>')+'</td>'\
-          +'<td class=\"table-cell\" style=\"color:var(--muted);font-size:12px;\">'+esc(p.blockchain)+'</td>'\
+        return '<tr style="border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background=\'rgba(0,240,255,0.03)\'" onmouseout="this.style.background=\'transparent\'">'
+          +'<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">'+esc(p.name)+'</td>'
+          +'<td class="table-cell" style="text-align:right;font-family:\'JetBrains Mono\',monospace;font-weight:700;">$'+fmtBigNum(p.tvl)+'</td>'
+          +'<td class="table-cell">'+esc(p.assetType)+'</td>'
+          +'<td class="table-cell" style="text-align:center;"><span class="badge" style="background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);">'+p.transparencyScore+'/100</span></td>'
+          +'<td class="table-cell" style="text-align:center;">'+(p.hasProofOfPortfolio?'<span style="color:var(--neon-green);font-size:18px;">✓</span>':'<span style="color:var(--muted);">—</span>')+'</td>'
+          +'<td class="table-cell" style="color:var(--muted);font-size:12px;">'+esc(p.blockchain)+'</td>'
           +'</tr>';
       }).join('');
 
       document.getElementById('rwaContent').innerHTML = 
-        '<div class=\"card\" style=\"margin-bottom:20px;padding:20px;background:linear-gradient(135deg,rgba(0,240,255,0.05),rgba(139,92,246,0.08));\">'\
-        +'<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:20px;\">'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">项目总数</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-cyan);\">'+data.total+'</div></div>'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">总锁仓价值</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-purple);\">$'+fmtBigNum(data.totalTvl)+'</div></div>'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">平均透明度</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-green);\">'+Math.round(data.avgTransparency)+'/100</div></div>'\
-        +'</div></div>'\
-        +'<div class=\"card\"><table style=\"width:100%;border-collapse:collapse;\"><thead><tr>'\
-        +'<th class=\"table-header\">项目名称</th>'\
-        +'<th class=\"table-header\" style=\"text-align:right;\">TVL</th>'\
-        +'<th class=\"table-header\">资产类型</th>'\
-        +'<th class=\"table-header\" style=\"text-align:center;\">透明度</th>'\
-        +'<th class=\"table-header\" style=\"text-align:center;\">Proof of Portfolio</th>'\
-        +'<th class=\"table-header\">区块链</th>'\
+        '<div class="card" style="margin-bottom:20px;padding:20px;background:linear-gradient(135deg,rgba(0,240,255,0.05),rgba(139,92,246,0.08));">'
+        +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">项目总数</div><div style="font-size:28px;font-weight:800;color:var(--neon-cyan);">'+data.total+'</div></div>'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">总锁仓价值</div><div style="font-size:28px;font-weight:800;color:var(--neon-purple);">$'+fmtBigNum(data.totalTvl)+'</div></div>'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">平均透明度</div><div style="font-size:28px;font-weight:800;color:var(--neon-green);">'+Math.round(data.avgTransparency)+'/100</div></div>'
+        +'</div></div>'
+        +'<div class="card"><table style="width:100%;border-collapse:collapse;"><thead><tr>'
+        +'<th class="table-header">项目名称</th>'
+        +'<th class="table-header" style="text-align:right;">TVL</th>'
+        +'<th class="table-header">资产类型</th>'
+        +'<th class="table-header" style="text-align:center;">透明度</th>'
+        +'<th class="table-header" style="text-align:center;">Proof of Portfolio</th>'
+        +'<th class="table-header">区块链</th>'
         +'</tr></thead><tbody>'+rows+'</tbody></table></div>';
     })
     .catch(function(e) {
@@ -2770,30 +2770,30 @@ renderers['ai-agents'] = function(el, forceRefresh) {
       var agents = data.agents || [];
       var rows = agents.map(function(a, idx) {
         var rankColor = idx === 0 ? 'var(--neon-orange)' : (idx === 1 ? 'var(--neon-cyan)' : (idx === 2 ? 'var(--neon-purple)' : 'var(--muted)'));
-        return '<tr style=\"border-bottom:1px solid var(--border);transition:background 0.2s;\" onmouseover=\"this.style.background=\\'rgba(0,240,255,0.03)\\'\" onmouseout=\"this.style.background=\\'transparent\\'\">'\
-          +'<td class=\"table-cell\" style=\"text-align:center;font-weight:900;font-size:18px;color:'+rankColor+';\">'+a.rank+'</td>'\
-          +'<td class=\"table-cell\" style=\"font-weight:700;color:var(--neon-cyan);\">'+esc(a.name)+'</td>'\
-          +'<td class=\"table-cell\" style=\"text-align:right;font-family:\\'JetBrains Mono\\',monospace;font-weight:700;\">$'+fmtBigNum(a.tradingVolume24h)+'</td>'\
-          +'<td class=\"table-cell\" style=\"text-align:center;\"><span class=\"badge\" style=\"background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);\">'+a.successRate+'%</span></td>'\
-          +'<td class=\"table-cell\" style=\"text-align:center;\">'+(a.x402Compatible?'<span style=\"color:var(--neon-green);font-size:18px;\">✓</span>':'<span style=\"color:var(--muted);\">—</span>')+'</td>'\
-          +'<td class=\"table-cell\" style=\"color:var(--muted);font-size:12px;\">'+esc(a.strategy)+'</td>'\
+        return '<tr style="border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background=\'rgba(0,240,255,0.03)\'" onmouseout="this.style.background=\'transparent\'">'
+          +'<td class="table-cell" style="text-align:center;font-weight:900;font-size:18px;color:'+rankColor+';">'+a.rank+'</td>'
+          +'<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">'+esc(a.name)+'</td>'
+          +'<td class="table-cell" style="text-align:right;font-family:\'JetBrains Mono\',monospace;font-weight:700;">$'+fmtBigNum(a.tradingVolume24h)+'</td>'
+          +'<td class="table-cell" style="text-align:center;"><span class="badge" style="background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);">'+a.successRate+'%</span></td>'
+          +'<td class="table-cell" style="text-align:center;">'+(a.x402Compatible?'<span style="color:var(--neon-green);font-size:18px;">✓</span>':'<span style="color:var(--muted);">—</span>')+'</td>'
+          +'<td class="table-cell" style="color:var(--muted);font-size:12px;">'+esc(a.strategy)+'</td>'
           +'</tr>';
       }).join('');
 
       document.getElementById('agentContent').innerHTML = 
-        '<div class=\"card\" style=\"margin-bottom:20px;padding:20px;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(0,240,255,0.05));\">'\
-        +'<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:20px;\">'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">活跃 Agent</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-purple);\">'+data.total+'</div></div>'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">24h 交易量</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-cyan);\">$'+fmtBigNum(data.totalVolume24h)+'</div></div>'\
-        +'<div><div style=\"font-size:12px;color:var(--muted);margin-bottom:6px;\">平均成功率</div><div style=\"font-size:28px;font-weight:800;color:var(--neon-green);\">'+Math.round(data.avgSuccessRate)+'%</div></div>'\
-        +'</div></div>'\
-        +'<div class=\"card\"><table style=\"width:100%;border-collapse:collapse;\"><thead><tr>'\
-        +'<th class=\"table-header\" style=\"text-align:center;\">排名</th>'\
-        +'<th class=\"table-header\">Agent 名称</th>'\
-        +'<th class=\"table-header\" style=\"text-align:right;\">24h 交易量</th>'\
-        +'<th class=\"table-header\" style=\"text-align:center;\">成功率</th>'\
-        +'<th class=\"table-header\" style=\"text-align:center;\">x402 兼容</th>'\
-        +'<th class=\"table-header\">策略类型</th>'\
+        '<div class="card" style="margin-bottom:20px;padding:20px;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(0,240,255,0.05));">'
+        +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">活跃 Agent</div><div style="font-size:28px;font-weight:800;color:var(--neon-purple);">'+data.total+'</div></div>'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">24h 交易量</div><div style="font-size:28px;font-weight:800;color:var(--neon-cyan);">$'+fmtBigNum(data.totalVolume24h)+'</div></div>'
+        +'<div><div style="font-size:12px;color:var(--muted);margin-bottom:6px;">平均成功率</div><div style="font-size:28px;font-weight:800;color:var(--neon-green);">'+Math.round(data.avgSuccessRate)+'%</div></div>'
+        +'</div></div>'
+        +'<div class="card"><table style="width:100%;border-collapse:collapse;"><thead><tr>'
+        +'<th class="table-header" style="text-align:center;">排名</th>'
+        +'<th class="table-header">Agent 名称</th>'
+        +'<th class="table-header" style="text-align:right;">24h 交易量</th>'
+        +'<th class="table-header" style="text-align:center;">成功率</th>'
+        +'<th class="table-header" style="text-align:center;">x402 兼容</th>'
+        +'<th class="table-header">策略类型</th>'
         +'</tr></thead><tbody>'+rows+'</tbody></table></div>';
     })
     .catch(function(e) {
