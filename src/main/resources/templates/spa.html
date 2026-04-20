@@ -2770,7 +2770,14 @@ renderers['ai-agents'] = function(el, forceRefresh) {
       var agents = data.agents || [];
       var rows = agents.map(function(a, idx) {
         var rankColor = idx === 0 ? 'var(--neon-orange)' : (idx === 1 ? 'var(--neon-cyan)' : (idx === 2 ? 'var(--neon-purple)' : 'var(--muted)'));
-        return '<tr style="border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background=\'rgba(0,240,255,0.03)\'" onmouseout="this.style.background=\'transparent\'">'\n          +'<td class="table-cell" style="text-align:center;font-weight:900;font-size:18px;color:'+rankColor+';">'+(idx+1)+'</td>'\n          +'<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">'+esc(a.name)+'</td>'\n          +'<td class="table-cell" style="text-align:right;font-family:\'JetBrains Mono\',monospace;font-weight:700;">$'+fmtBigNum(a.tradingVolume24h)+'</td>'\n          +'<td class="table-cell" style="text-align:center;"><span class="badge" style="background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);">'+a.successRate+'%</span></td>'\n          +'<td class="table-cell" style="text-align:center;">'+(a.x402Compatible?'<span style="color:var(--neon-green);font-size:18px;">✓</span>':'<span style="color:var(--muted);">—</span>')+'</td>'\n          +'<td class="table-cell" style="color:var(--muted);font-size:12px;">'+esc(a.strategyType)+'</td>'\n          +'</tr>';
+        return '<tr style="border-bottom:1px solid var(--border);transition:background 0.2s;" onmouseover="this.style.background=\'rgba(0,240,255,0.03)\'" onmouseout="this.style.background=\'transparent\'">'
+          +'<td class="table-cell" style="text-align:center;font-weight:900;font-size:18px;color:'+rankColor+';">'+(idx+1)+'</td>'
+          +'<td class="table-cell" style="font-weight:700;color:var(--neon-cyan);">'+esc(a.name)+'</td>'
+          +'<td class="table-cell" style="text-align:right;font-family:\'JetBrains Mono\',monospace;font-weight:700;">$'+fmtBigNum(a.tradingVolume24h)+'</td>'
+          +'<td class="table-cell" style="text-align:center;"><span class="badge" style="background:rgba(0,255,136,0.12);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2);">'+a.successRate+'%</span></td>'
+          +'<td class="table-cell" style="text-align:center;">'+(a.x402Compatible?'<span style="color:var(--neon-green);font-size:18px;">✓</span>':'<span style="color:var(--muted);">—</span>')+'</td>'
+          +'<td class="table-cell" style="color:var(--muted);font-size:12px;">'+esc(a.strategyType)+'</td>'
+          +'</tr>';
       }).join('');
 
       document.getElementById('agentContent').innerHTML = 
