@@ -61,6 +61,19 @@ public class AiAgentService {
         LocalDateTime now = LocalDateTime.now();
 
         agents.add(new AiAgent(
+                "hermes",
+                "Hermes Agent",
+                "Hermes",
+                new BigDecimal("15200000"),
+                89.7,
+                "Multi-Platform AI Assistant",
+                true,
+                "https://github.com/OpenAgentsInc/openagents",
+                "Manual Curation",
+                now
+        ));
+
+        agents.add(new AiAgent(
                 "openclaw",
                 "OpenClaw",
                 "OpenClaw",
