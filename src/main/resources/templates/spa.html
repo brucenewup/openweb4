@@ -879,17 +879,19 @@ let autoRefreshTimer = null;
 function clearAutoRefresh() { if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; } }
 
 /* ═══════════════════════ Sidebar ═══════════════════════ */
-const sidebar = $('sidebar');
-const sidebarToggle = $('sidebarToggle');
-const toggleIcon = $('toggleIcon');
+function initSidebar() {
+  const sidebar = $('sidebar');
+  const sidebarToggle = $('sidebarToggle');
+  const toggleIcon = $('toggleIcon');
 
-function setSidebarState(collapsed) {
-  if (collapsed) { sidebar.classList.add('collapsed'); toggleIcon.setAttribute('points','9 18 15 12 9 6'); }
-  else { sidebar.classList.remove('collapsed'); toggleIcon.setAttribute('points','15 18 9 12 15 6'); }
-  localStorage.setItem('openweb4.sidebar', collapsed ? 'collapsed' : 'expanded');
+  function setSidebarState(collapsed) {
+    if (collapsed) { sidebar.classList.add('collapsed'); toggleIcon.setAttribute('points','9 18 15 12 9 6'); }
+    else { sidebar.classList.remove('collapsed'); toggleIcon.setAttribute('points','15 18 9 12 15 6'); }
+    localStorage.setItem('openweb4.sidebar', collapsed ? 'collapsed' : 'expanded');
+  }
+  sidebarToggle.addEventListener('click', () => setSidebarState(!sidebar.classList.contains('collapsed')));
+  if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(true);
 }
-sidebarToggle.addEventListener('click', () => setSidebarState(!sidebar.classList.contains('collapsed')));
-if (localStorage.getItem('openweb4.sidebar') === 'collapsed') setSidebarState(true);
 
 /* ═══════════════════════ Language Switch ═══════════════════════ */
 var NAV_PAGE_KEYS = {dashboard:'nav_dashboard', news:'nav_news', 'kol-tweets':'nav_kol',
@@ -2719,7 +2721,7 @@ renderers['rwa-projects'] = function(el, forceRefresh) {
   el.innerHTML = '<div class=\"page-fade-in\"><div style=\"margin-bottom:24px;\"><h1 class=\"page-title\">RWA 代币化监控</h1><p class=\"page-sub\">Real World Assets Tokenization</p></div>'
     +'<div id=\"rwaContent\"><div style=\"text-align:center;padding:60px;\"><div class=\"skeleton\" style=\"width:200px;height:24px;margin:0 auto 16px;\"></div></div></div>'
     +'<div style=\"margin-top:20px;display:flex;gap:12px;\">'
-    +'<button type=\"button\" class=\"btn-primary\" onclick=\"renderers[\'rwa-projects\']($(\\'pageContent\\'), true)\">'+t('btn_refresh')+'</button>'
+    +'<button type="button" class="btn-primary" onclick="renderers[\'rwa-projects\'](\\$(\'pageContent\'), true)">'+t('btn_refresh')+'</button>'
     +'</div></div>';
 
   fetchJson(apiUrl('/api/rwa-projects?lang=zh', !!forceRefresh))
@@ -2762,7 +2764,7 @@ renderers['ai-agents'] = function(el, forceRefresh) {
   el.innerHTML = '<div class=\"page-fade-in\"><div style=\"margin-bottom:24px;\"><h1 class=\"page-title\">AI Agent 交易监控</h1><p class=\"page-sub\">AI-Powered Trading Agents</p></div>'
     +'<div id=\"agentContent\"><div style=\"text-align:center;padding:60px;\"><div class=\"skeleton\" style=\"width:200px;height:24px;margin:0 auto 16px;\"></div></div></div>'
     +'<div style=\"margin-top:20px;display:flex;gap:12px;\">'
-    +'<button type=\"button\" class=\"btn-primary\" onclick=\"renderers[\'ai-agents\']($(\\'pageContent\\'), true)\">'+t('btn_refresh')+'</button>'
+    +'<button type="button" class="btn-primary" onclick="renderers[\'ai-agents\'](\\$(\'pageContent\'), true)">'+t('btn_refresh')+'</button>'
     +'</div></div>';
 
   fetchJson(apiUrl('/api/ai-agents?lang=zh', !!forceRefresh))
@@ -2805,6 +2807,7 @@ renderers['ai-agents'] = function(el, forceRefresh) {
 if (!location.hash || location.hash === '#' || location.hash === '#/') {
   location.hash = '#/dashboard';
 }
+initSidebar();
 syncSidebarI18n();
 navigate();
 

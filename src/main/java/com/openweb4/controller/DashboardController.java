@@ -8,7 +8,12 @@ public class DashboardController {
 
     @GetMapping("/")
     public String index() {
-        return "spa";
+        return "redirect:/app/";
+    }
+
+    @GetMapping("/app/")
+    public String app() {
+        return "forward:/app/index.html";
     }
 
     @GetMapping({"/dashboard", "/news", "/kol-tweets", "/market-forecast", "/market-indices", "/transaction-skills", "/ai-chat"})
