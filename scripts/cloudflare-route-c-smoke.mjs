@@ -5,6 +5,7 @@ import { cwd, exit } from 'node:process'
 const root = cwd()
 const requiredFiles = [
   'wrangler.toml',
+  'worker/index.ts',
   'frontend/dist/index.html',
   'frontend/dist/_redirects',
   'functions/api/overview.ts',
@@ -24,8 +25,17 @@ for (const file of requiredFiles) {
 
 if (existsSync(join(root, 'wrangler.toml'))) {
   const wrangler = readFileSync(join(root, 'wrangler.toml'), 'utf8')
-  if (!wrangler.includes('pages_build_output_dir = "frontend/dist"')) {
-    failures.push('wrangler.toml must point pages_build_output_dir to frontend/dist')
+  if (!wrangler.includes('main = "worker/index.ts"')) {
+    failures.push('wrangler.toml must set main to worker/index.ts for wrangler versions upload')
+  }
+  if (!wrangler.includes('directory = "frontend/dist"')) {
+    failures.push('wrangler.toml must point assets.directory to frontend/dist')
+  }
+  if (!wrangler.includes('binding = "ASSETS"')) {
+    failures.push('wrangler.toml must bind static assets as ASSETS')
+  }
+  if (!wrangler.includes('[build]') || !wrangler.includes('npm --prefix frontend run build')) {
+    failures.push('wrangler.toml must build the frontend before upload')
   }
 }
 
