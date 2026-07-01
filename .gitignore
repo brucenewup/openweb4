@@ -21,6 +21,9 @@
 # Node (when running frontend from repo root)
 node_modules/
 
+# Cloudflare Wrangler local build cache
+.wrangler/
+
 # Plans / docs (do not publish)
 /docs/
 /PLAN.md

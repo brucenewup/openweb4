@@ -1,3 +1,7 @@
 # Cloudflare Pages SPA fallback
-# API 请求会 404（需要单独部署后端）
-/*    /index.html   200
+# API routes are handled by Pages Functions.
+/dashboard     /index.html   200
+/news          /index.html   200
+/kol-tweets    /index.html   200
+/ai-chat       /index.html   200
+/claw-nav      /index.html   200

@@ -1,0 +1,12 @@
+{
+  "name": "openweb4-cloudflare",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "npm --prefix frontend ci && npm --prefix frontend run build",
+    "test:cloudflare": "node scripts/cloudflare-route-c-smoke.mjs",
+    "cf:dev": "npm --prefix frontend run build && npx wrangler pages dev frontend/dist",
+    "cf:deploy": "npm --prefix frontend run build && npx wrangler pages deploy frontend/dist --project-name openweb4 --branch dev"
+  }
+}

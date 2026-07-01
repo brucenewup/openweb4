@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useCallback, useState, useEffect, useRef } from 'react'
 import './App.css'
 
 // ─── Types ─────────────────────────────────────────────────────
@@ -68,7 +68,7 @@ function Dashboard() {
   const [txs, setTxs] = useState<Tx[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchData = () => {
+  const fetchData = useCallback(() => {
     setLoading(true)
     fetch('/api/overview')
       .then(r => r.json())
@@ -80,9 +80,12 @@ function Dashboard() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }
+  }, [])
 
-  useEffect(() => { fetchData() }, [])
+  useEffect(() => {
+    const id = window.setTimeout(fetchData, 0)
+    return () => window.clearTimeout(id)
+  }, [fetchData])
 
   return (
     <main className="page">
@@ -162,7 +165,7 @@ function News({ lang }: { lang: string }) {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchNews = (force = false) => {
+  const fetchNews = useCallback((force = false) => {
     setLoading(true)
     const suffix = force ? `&refresh=1&_=${Date.now()}` : ''
     fetch(`/api/news?lang=${lang}${suffix}`)
@@ -170,9 +173,12 @@ function News({ lang }: { lang: string }) {
       .then(d => setArticles(d.articles || []))
       .catch(() => setArticles([]))
       .finally(() => setLoading(false))
-  }
+  }, [lang])
 
-  useEffect(() => { fetchNews() }, [lang])
+  useEffect(() => {
+    const id = window.setTimeout(() => fetchNews(), 0)
+    return () => window.clearTimeout(id)
+  }, [fetchNews])
 
   return (
     <main className="page">
@@ -220,7 +226,7 @@ function KolTweets({ lang, kolAuthors, subscribed, onToggle }: {
   const [loading, setLoading] = useState(true)
   const [showKolPanel, setShowKolPanel] = useState(false)
 
-  const fetchTweets = (force = false) => {
+  const fetchTweets = useCallback((force = false) => {
     setLoading(true)
     const suffix = force ? `&refresh=1&_=${Date.now()}` : ''
     fetch(`/api/tweets/latest?lang=${lang}${suffix}`)
@@ -228,9 +234,12 @@ function KolTweets({ lang, kolAuthors, subscribed, onToggle }: {
       .then(d => setTweets(d.tweets || []))
       .catch(() => setTweets([]))
       .finally(() => setLoading(false))
-  }
+  }, [lang])
 
-  useEffect(() => { fetchTweets() }, [lang])
+  useEffect(() => {
+    const id = window.setTimeout(() => fetchTweets(), 0)
+    return () => window.clearTimeout(id)
+  }, [fetchTweets])
 
   return (
     <main className="page">
@@ -337,62 +346,36 @@ function AiChat() {
   const [msgs, setMsgs] = useState<{role:'ai'|'user'; text: string; error?: boolean}[]>([])
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
-  const [connected, setConnected] = useState(false)
-  const wsRef = useRef<WebSocket | null>(null)
+  const connected = true
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const retryCountRef = useRef(0)
-  const MAX_RETRIES = 5
-
-  const connect = () => {
-    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const ws = new WebSocket(proto + '//' + location.host + '/ws/chat')
-    wsRef.current = ws
-
-    ws.onopen = () => { setConnected(true); retryCountRef.current = 0 }
-    ws.onclose = ws.onerror = () => {
-      setConnected(false)
-      if (retryCountRef.current < MAX_RETRIES) {
-        const delay = Math.min(1000 * Math.pow(2, retryCountRef.current), 16000)
-        retryCountRef.current++
-        setTimeout(connect, delay)
-      } else {
-        setMsgs(prev => [...prev, { role: 'ai', text: '连接已断开，请刷新页面重试。', error: true }])
-      }
-    }
-    ws.onmessage = ev => {
-      try {
-        const d = JSON.parse(ev.data)
-        if (d.type === 'chunk') {
-          setMsgs(prev => {
-            const last = prev[prev.length - 1]
-            if (last?.role === 'ai' && !last.error) {
-              const updated = [...prev]; updated[updated.length - 1] = { ...last, text: last.text + d.chunk }; return updated
-            }
-            return [...prev, { role: 'ai', text: d.chunk }]
-          })
-          bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-        }
-        if (d.type === 'done') { setSending(false) }
-        if (d.type === 'error') {
-          setMsgs(prev => [...prev.filter(m => !(m.role === 'ai' && !m.text)), { role: 'ai', text: d.message || '出错了', error: true }])
-          setSending(false)
-        }
-      } catch (_) { setSending(false) }
-    }
-  }
-
-  useEffect(() => { connect(); return () => wsRef.current?.close() }, [])
-
-  const send = () => {
+  const send = async () => {
     const text = input.trim()
-    if (!text || sending || !connected) return
+    if (!text || sending) return
     setMsgs(prev => [...prev, { role: 'user', text }])
     setInput('')
     setSending(true)
-    wsRef.current?.send(JSON.stringify({ type: 'chat', message: text }))
     setTimeout(() => textareaRef.current?.focus(), 0)
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
+      const data = await response.json()
+      setMsgs(prev => [...prev, {
+        role: 'ai',
+        text: data.message || '没有收到有效回复。',
+        error: !response.ok,
+      }])
+    } catch {
+      setMsgs(prev => [...prev, { role: 'ai', text: '请求失败，请稍后重试。', error: true }])
+    } finally {
+      setSending(false)
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -409,7 +392,7 @@ function AiChat() {
       <div className="page-header">
         <div>
           <h1 className="page-title">新对话</h1>
-          <p className="page-sub">支持多轮对话</p>
+          <p className="page-sub">通过 Cloudflare Pages Functions 处理</p>
         </div>
         <div className={`status-badge ${connected ? 'connected' : 'disconnected'}`}>
           <span className="dot" />
@@ -527,6 +510,7 @@ export default function App() {
   const { theme, changeTheme } = useTheme()
   const { collapsed, toggle } = useSidebar()
   const { lang, changeLang } = useLang()
+  const kolLoadedRef = useRef(false)
 
   // KOL 订阅状态
   const [kolAuthors, setKolAuthors] = useState<TweetAuthor[]>([])
@@ -536,13 +520,16 @@ export default function App() {
 
   // 加载 KOL 列表
   useEffect(() => {
+    if (kolLoadedRef.current) return
+    kolLoadedRef.current = true
     fetch('/api/kol')
       .then(r => r.json())
       .then(d => {
         const authors: TweetAuthor[] = d.authors || []
         setKolAuthors(authors)
         // 如果本地没有订阅记录，默认全选
-        if (subscribed.length === 0) {
+        const stored = JSON.parse(localStorage.getItem('kol-subscribed') || '[]')
+        if (stored.length === 0) {
           const all = authors.map((a: TweetAuthor) => a.handle)
           setSubscribed(all)
           localStorage.setItem('kol-subscribed', JSON.stringify(all))
