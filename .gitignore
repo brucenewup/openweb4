@@ -27,3 +27,6 @@ node_modules/
 # Plans / docs (do not publish)
 /docs/
 /PLAN.md
+
+# Loop Engineering run outputs
+loop-run-log.md
