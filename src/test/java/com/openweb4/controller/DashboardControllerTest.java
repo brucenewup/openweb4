@@ -17,10 +17,10 @@ class DashboardControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void indexReturnsSpaShell() throws Exception {
+    void indexRedirectsToApp() throws Exception {
         mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("spa"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/app/"));
     }
 
     @Test
